@@ -18,8 +18,6 @@
 .grid-item {
   border: 1px solid #ccc;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
 }
 
 /* Style for header */
@@ -35,6 +33,10 @@ nav {
 
 nav button {
   margin-left: 10px; /* Adjust margin as needed */
+}
+/*Img settings*/
+nav img{
+  align-self: center;
 }
 /*Define the stype and layout for demo button*/
 nav #demo{
