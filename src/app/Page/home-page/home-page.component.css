@@ -1,0 +1,48 @@
+/* CSS for layout and spacing */
+
+/* Center content horizontally */
+.content {
+  text-align: center;
+  margin-top: 20px; /* Adjust as needed */
+}
+
+/* Grid layout */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  grid-gap: 10px; /* Gap between grid items */
+  align-items: center;
+}
+
+/* Style for each grid item */
+.grid-item {
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+/* Style for header */
+header {
+  background-color: #30dbbf; /* Example background color */
+  padding: 30px 0; /* Adjust padding as needed */
+}
+
+nav {
+  text-align: right;
+  padding-right: 20px; /* Adjust padding as needed */
+}
+
+nav button {
+  margin-left: 10px; /* Adjust margin as needed */
+}
+/*Define the stype and layout for demo button*/
+nav #demo{
+  float: left;
+  background-color: #fffdfd;
+}
+/*Define the style and position of the logout button*/
+nav #Logout{
+  float: right;
+  background-color: #fffefe;
+}
