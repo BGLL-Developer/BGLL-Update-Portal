@@ -8,4 +8,18 @@ import { LoginComponent } from '../../Component/login/login.component';
   styleUrl: './login-page.component.css',
   imports: [LoginComponent],
 })
-export class LoginPageComponent {}
+export class LoginPageComponent {
+
+//Function to verify user
+  verifyUser() {
+
+}
+
+
+  onLoginClicked() {
+  
+  console.log("Login sucessfull!");
+
+
+}
+}
