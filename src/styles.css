@@ -1,12 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
 .success-snakBar {
-    --mdc-snackbar-container-color: #673ab7;
-    --mdc-snackbar-supporting-text-color: white;
-    --mat-mdc-snack-bar-button-color: #00a673;
-  }
-  
-  .error-snakBar {
-    --mdc-snackbar-container-color: red;
-    --mdc-snackbar-supporting-text-color: white;
-    --mat-mdc-snack-bar-button-color: rgb(114, 2, 2);
-  }
+  --mdc-snackbar-container-color: #673ab7;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-mdc-snack-bar-button-color: #00a673;
+}
+
+.error-snakBar {
+  --mdc-snackbar-container-color: red;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-mdc-snack-bar-button-color: rgb(114, 2, 2);
+}

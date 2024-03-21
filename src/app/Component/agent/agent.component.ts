@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-agent',
   standalone: true,
-  imports: [],
   templateUrl: './agent.component.html',
-  styleUrl: './agent.component.css'
+  styleUrl: './agent.component.css',
+  imports: [HeaderComponent],
 })
-export class AgentComponent {
-
-}
+export class AgentComponent {}

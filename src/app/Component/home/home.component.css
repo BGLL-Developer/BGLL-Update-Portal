@@ -1,0 +1,8 @@
+.grid-item {
+  cursor: pointer; /* Change cursor to pointer when hovered over */
+  transition: background-color 0.3s; /* Smooth transition for background color change */
+}
+
+.grid-item:hover {
+  background-color: lightgray; /* Change background color when hovered over */
+}

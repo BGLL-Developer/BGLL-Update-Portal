@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-jackpot',
   standalone: true,
-  imports: [],
   templateUrl: './jackpot.component.html',
-  styleUrl: './jackpot.component.css'
+  styleUrl: './jackpot.component.css',
+  imports: [HeaderComponent],
 })
-export class JackpotComponent {
-
-}
+export class JackpotComponent {}

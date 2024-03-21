@@ -1,1 +1,37 @@
-<p>login works!</p>
+<div class="container px-4">
+  <div class="px-4 m-4">
+    <img
+      src="assets/logo.png"
+      alt="BGLL Logo"
+      class="mb-3"
+      style="width: 200px; height: auto"
+    />
+    <h2 class="text-center">Website Update Portal <br />Login</h2>
+    <!-- login form -->
+    <form>
+      <div class="mb-1">
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" id="email" name="email" required />
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            type="password"
+            id="password"
+            name="password"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button mat-raised-button color="primary" (click)="verifyUser()">
+          Login
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

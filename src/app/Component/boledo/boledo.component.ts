@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-boledo',
   standalone: true,
-  imports: [],
   templateUrl: './boledo.component.html',
-  styleUrl: './boledo.component.css'
+  styleUrl: './boledo.component.css',
+  imports: [HeaderComponent],
 })
-export class BoledoComponent {
-
-}
+export class BoledoComponent {}
