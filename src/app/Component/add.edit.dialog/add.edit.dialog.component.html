@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Enter New Entry:</h2>
+<mat-dialog-content>
+  <div>
+    <mat-form-field appearance="fill"> </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Enter Numbers Here</mat-label>
+      <input matInput placeholder="Winning Numbers" />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<!--dialog buttons-->
+<mat-dialog-actions>
+  <button mat-raised-button (click)="close()">Close</button>
+
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

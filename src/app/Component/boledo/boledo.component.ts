@@ -8,12 +8,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
-import { AEDialogComponent } from '../aedialog/aedialog.component';
+import { AddEditDialogComponent } from '../add.edit.dialog/add.edit.dialog.component';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogModule,
 } from '@angular/material/dialog';
+import { MatMenuModule, MatMenuPanel } from '@angular/material/menu';
+
+/**
+ * @title Menu with icons
+ */
 
 export interface WinningNumbers {
   date: string; //setting it as string for testing purposes
@@ -40,13 +45,14 @@ const ELEMENT_DATA: WinningNumbers[] = [
     MatDatepickerModule,
     MatTableModule,
     MatDividerModule,
-    AEDialogComponent,
-    MatDialogConfig,
+    AddEditDialogComponent,
     MatDialogModule,
+    MatMenuModule,
   ],
 })
 export class BoledoComponent {
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog,
+    private Menu: MatMenuPanel<any>) {}
 
   deleteEntry() {
     throw new Error('Method not implemented.');
@@ -58,13 +64,12 @@ export class BoledoComponent {
   AddEntry() {
     const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = '400px';
+    dialogConfig.minWidth = 'auto';
 
     dialogConfig.data = ELEMENT_DATA;
 
-    this.dialog.open(AEDialogComponent, dialogConfig);
+    this.dialog.open(AddEditDialogComponent, dialogConfig);
   }
 
   displayedColumns: string[] = ['date', 'WinNum'];

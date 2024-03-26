@@ -46,6 +46,7 @@
     <div class="row">
       <div class="col"></div>
       <div class="col-lg-6 col-md-6">
+        <!--Table starts-->
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
           <!-- Date Column -->
           <ng-container matColumnDef="date">
@@ -55,10 +56,44 @@
 
           <!-- Winning numbers Column -->
           <ng-container matColumnDef="WinNum">
-            <th mat-header-cell *matHeaderCellDef>Winning Numbers</th>
+            <th mat-header-cell *matHeaderCellDef>Winning digits</th>
+            <td mat-cell *matCellDef="let element">{{ element.WinNum }}</td>
+          </ng-container>
+
+          <!--action buttons column-->
+          <ng-container matColumnDef="Action-Buttons">
+            <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.WinNum }}
               <button
+                mat-icon-button
+                [matMenuTriggerFor]="more_vert"
+                aria-label="Menu for table button actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item disabled>
+                  <mat-icon>delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <!--Table end-->
+      </div>
+      <div class="col"></div>
+    </div>
+  </div>
+</div>
+
+<!--<button
                 class="action-Buttons"
                 mat-icon-button
                 aria-label="edit-button"
@@ -73,16 +108,4 @@
                 (click)="deleteEntry()"
               >
                 <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-        <!--Table end-->
-      </div>
-      <div class="col"></div>
-    </div>
-  </div>
-</div>
+              </button>-->
