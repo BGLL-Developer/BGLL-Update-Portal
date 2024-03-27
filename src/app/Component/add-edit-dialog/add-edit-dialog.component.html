@@ -1,0 +1,29 @@
+
+<mat-dialog-content>
+
+    <!--Date-Picker-->
+    <div>
+        <mat-form-field>
+            <mat-label>Select a Date</mat-label>
+            <input matInput [matDatepicker]="picker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+    </div>
+
+    <!--Number Input-->
+    <div>
+    <mat-form-field appearance="outline">
+        <mat-label>Enter Number Here</mat-label>
+        <input matInput placeholder=" XXXXXXXXX ">
+      </mat-form-field>
+    </div>
+</mat-dialog-content>
+
+<div></div>
+
+<mat-dialog-actions class="dialog-actions">
+    <button mat-raised-button color="basic" (click)="Save()">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-raised-button color="warn" (click)="Cancel()">Cancel</button>
+</mat-dialog-actions>

@@ -1,12 +1,9 @@
-.button-container {
+#AddButton {
   float: right;
 }
 
-.date-picker {
+#date-picker {
   float: left;
 }
 
-.actionButtons {
-  float: right;
-}
 

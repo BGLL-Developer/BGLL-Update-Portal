@@ -1,0 +1,57 @@
+<mat-dialog-content>
+  <!--Business Name Input-->
+  <div>
+    <mat-form-field>
+      <mat-label>Enter Business Name</mat-label>
+      <input matInput placeholder="Business Name" />
+    </mat-form-field>
+  </div>
+  <!--Address Input-->
+  <div>
+    <mat-form-field>
+      <mat-label>Enter Address</mat-label>
+      <input matInput placeholder="Address" />
+    </mat-form-field>
+  </div>
+  <!--Community Selector-->
+  <div>
+    <mat-form-field>
+      <mat-label> Communities </mat-label>
+      <input
+        type="text"
+        placeholder="Enter Community"
+        aria-label="Community"
+        matInput
+        [formControl]="settlementControl"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (settlement of filteredSettlements | async; track settlement) {
+        <mat-option [value]="settlement"> {{ settlement }} </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <!--District Selector-->
+  <div>
+    <mat-form-field>
+      <mat-label>Select District</mat-label>
+      <mat-select>
+        <mat-option value="corozal">Corozal</mat-option>
+        <mat-option value="orangewalk">OrangeWalk</mat-option>
+        <mat-option value="belize">Belize</mat-option>
+        <mat-option value="cayo">Cayo</mat-option>
+        <mat-option value="stanncreek">Stann Creek</mat-option>
+        <mat-option value="toledo">Toledo</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<div></div>
+<!--Control Buttons-->
+<mat-dialog-actions class="action-buttons">
+  <button mat-raised-button color="basic" (click)="Save()">Save</button
+  >&nbsp;&nbsp;&nbsp;&nbsp;
+  <button mat-raised-button color="warn" (click)="Cancel()">Cancel</button>
+</mat-dialog-actions>

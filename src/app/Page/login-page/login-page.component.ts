@@ -10,16 +10,4 @@ import { LoginComponent } from '../../Component/login/login.component';
 })
 export class LoginPageComponent {
 
-//Function to verify user
-  verifyUser() {
-
-}
-
-
-  onLoginClicked() {
-  
-  console.log("Login sucessfull!");
-
-
-}
 }

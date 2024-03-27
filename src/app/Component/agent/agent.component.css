@@ -1,0 +1,11 @@
+.filter-dropdown {
+    display: flex;
+    justify-content: left;
+    float: left;
+}
+
+.AddButton {
+    display: flex;
+    justify-content: right;
+    float: right;
+}

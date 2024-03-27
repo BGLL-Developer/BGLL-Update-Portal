@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,28 +7,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { AddEditDialogComponent } from '../add.edit.dialog/add.edit.dialog.component';
+import { AddEditDialogComponent } from '../add-edit-dialog/add-edit-dialog.component';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogModule,
 } from '@angular/material/dialog';
-import { MatMenuModule, MatMenuPanel } from '@angular/material/menu';
 
-/**
- * @title Menu with icons
- */
-
-export interface WinningNumbers {
-  date: string; //setting it as string for testing purposes
-  WinNum: string;
-}
-
-const ELEMENT_DATA: WinningNumbers[] = [
-  { date: '03/05/2024', WinNum: '34-21-21' },
-  { date: '02/05/2024', WinNum: '34-31-41' },
-];
 
 @Component({
   selector: 'app-boledo',
@@ -51,27 +38,31 @@ const ELEMENT_DATA: WinningNumbers[] = [
   ],
 })
 export class BoledoComponent {
-  constructor(private dialog: MatDialog,
-    private Menu: MatMenuPanel<any>) {}
-
-  deleteEntry() {
+  Delete() {
     throw new Error('Method not implemented.');
   }
-  editEntry() {
-    throw new Error('Method not implemented.');
-  }
+  Edit() {
+    const dialogConfig = new MatDialogConfig();
 
-  AddEntry() {
+    dialogConfig.data = this.dataSource;
+    
+    this.dialog.open(AddEditDialogComponent, dialogConfig);
+  }
+  constructor(private dialog: MatDialog) {}
+
+  Add() {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;
     dialogConfig.minWidth = 'auto';
-
-    dialogConfig.data = ELEMENT_DATA;
+    dialogConfig.minHeight = 'auto';
 
     this.dialog.open(AddEditDialogComponent, dialogConfig);
   }
 
-  displayedColumns: string[] = ['date', 'WinNum'];
-  dataSource = ELEMENT_DATA;
+  @Input() displayedColumns: string[] = ['date', 'number', 'action'];
+  dataSource = [
+    { date: '2024-03-01', number: '12345' },
+    { date: '2024-03-02', number: '54321' },
+  ];
 }
