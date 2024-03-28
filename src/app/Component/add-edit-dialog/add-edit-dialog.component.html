@@ -1,29 +1,30 @@
-
 <mat-dialog-content>
+  <!--Date-Picker-->
+  <div class="p-2">
+    <mat-form-field>
+      <mat-label>Select a Date</mat-label>
+      <input matInput [matDatepicker]="picker" />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
 
-    <!--Date-Picker-->
-    <div>
-        <mat-form-field>
-            <mat-label>Select a Date</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-    </div>
-
-    <!--Number Input-->
-    <div>
+  <!--Number Input-->
+  <div class="p-2">
     <mat-form-field appearance="outline">
-        <mat-label>Enter Number Here</mat-label>
-        <input matInput placeholder=" XXXXXXXXX ">
-      </mat-form-field>
-    </div>
+      <mat-label>Enter Number Here</mat-label>
+      <input matInput placeholder=" XXXXXXXXX " />
+    </mat-form-field>
+  </div>
 </mat-dialog-content>
 
 <div></div>
 
-<mat-dialog-actions class="dialog-actions">
-    <button mat-raised-button color="basic" (click)="Save()">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <button mat-raised-button color="warn" (click)="Cancel()">Cancel</button>
+<mat-dialog-actions class="dialog-actions pb-4">
+  <button mat-raised-button color="basic" (click)="Cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="Save()">Save</button>
 </mat-dialog-actions>
