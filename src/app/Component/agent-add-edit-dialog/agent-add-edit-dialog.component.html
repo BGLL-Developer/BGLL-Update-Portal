@@ -1,0 +1,74 @@
+<mat-dialog-content class="px-4">
+  <form [formGroup]="agentAddEditForm">
+    <h2 class="mb-4 text-center">{{ title }}</h2>
+    <div class="row">
+      <!--Business Name Input-->
+      <div class="col">
+        <mat-form-field>
+          <mat-label>Enter Business Name</mat-label>
+          <input
+            matInput
+            placeholder="Business Name"
+            formControlName="businessName"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <!--Address Input-->
+      <div class="col">
+        <mat-form-field>
+          <mat-label>Enter Address</mat-label>
+          <input
+            matInput
+            placeholder="Address"
+            formControlName="address"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <!--Community Selector-->
+      <div class="col">
+        <mat-form-field class="example-full-width">
+          <mat-label>Community</mat-label>
+          <input
+            type="text"
+            placeholder="Select one"
+            aria-label="Community"
+            matInput
+            [formControl]="communityControl"
+            [matAutocomplete]="auto"
+            formControlName="community"
+            required
+          />
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            @for (option of filteredOptions | async; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <!--District Selector-->
+      <div class="col">
+        <mat-form-field>
+          <mat-label>Select District</mat-label>
+          <mat-select formControlName="district" required>
+            <mat-option value="corozal">Corozal</mat-option>
+            <mat-option value="orangewalk">OrangeWalk</mat-option>
+            <mat-option value="belize">Belize</mat-option>
+            <mat-option value="cayo">Cayo</mat-option>
+            <mat-option value="stanncreek">Stann Creek</mat-option>
+            <mat-option value="toledo">Toledo</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<!--Control Buttons-->
+<mat-dialog-actions class="action-buttons mx-4 mb-4">
+  <button mat-raised-button color="basic" (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

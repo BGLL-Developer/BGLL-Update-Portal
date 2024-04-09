@@ -9,12 +9,12 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { AddEditDialogComponent } from '../add-edit-dialog/add-edit-dialog.component';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogModule,
 } from '@angular/material/dialog';
+import { JackpotAddEditDialogComponent } from '../jackpot-add-edit-dialog/jackpot-add-edit-dialog.component';
 
 @Component({
   selector: 'app-jackpot',
@@ -31,7 +31,6 @@ import {
     MatDatepickerModule,
     MatTableModule,
     MatDividerModule,
-    AddEditDialogComponent,
     MatDialogModule,
     MatMenuModule,
   ],
@@ -44,8 +43,8 @@ export class JackpotComponent {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.data = this.dataSource;
-    
-    this.dialog.open(AddEditDialogComponent, dialogConfig);
+
+    this.dialog.open(JackpotAddEditDialogComponent, dialogConfig);
   }
   constructor(private dialog: MatDialog) {}
 
@@ -56,7 +55,7 @@ export class JackpotComponent {
     dialogConfig.minWidth = 'auto';
     dialogConfig.minHeight = 'auto';
 
-    this.dialog.open(AddEditDialogComponent, dialogConfig);
+    this.dialog.open(JackpotAddEditDialogComponent, dialogConfig);
   }
 
   @Input() displayedColumns: string[] = ['date', 'number', 'action'];

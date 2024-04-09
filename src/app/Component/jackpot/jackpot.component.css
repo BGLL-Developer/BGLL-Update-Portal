@@ -1,10 +1,7 @@
 #AddButton {
-    float: right;
-  }
-  
-  #date-picker {
-    float: left;
-  }
-  
-  
-  
+  float: right;
+}
+
+#date-picker {
+  float: left;
+}

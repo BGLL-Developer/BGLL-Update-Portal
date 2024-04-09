@@ -9,13 +9,12 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { AddEditDialogComponent } from '../add-edit-dialog/add-edit-dialog.component';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogModule,
 } from '@angular/material/dialog';
-
+import { BoledoAddEditDialogComponent } from '../boledo-add-edit-dialog/boledo-add-edit-dialog.component';
 
 @Component({
   selector: 'app-boledo',
@@ -32,7 +31,6 @@ import {
     MatDatepickerModule,
     MatTableModule,
     MatDividerModule,
-    AddEditDialogComponent,
     MatDialogModule,
     MatMenuModule,
   ],
@@ -45,8 +43,8 @@ export class BoledoComponent {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.data = this.dataSource;
-    
-    this.dialog.open(AddEditDialogComponent, dialogConfig);
+
+    this.dialog.open(BoledoAddEditDialogComponent, dialogConfig);
   }
   constructor(private dialog: MatDialog) {}
 
@@ -57,7 +55,7 @@ export class BoledoComponent {
     dialogConfig.minWidth = 'auto';
     dialogConfig.minHeight = 'auto';
 
-    this.dialog.open(AddEditDialogComponent, dialogConfig);
+    this.dialog.open(BoledoAddEditDialogComponent, dialogConfig);
   }
 
   @Input() displayedColumns: string[] = ['date', 'number', 'action'];
