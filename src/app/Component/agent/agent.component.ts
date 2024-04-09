@@ -19,6 +19,7 @@ import { AgentAddEditDialogComponent } from '../agent-add-edit-dialog/agent-add-
 import { AgentService } from '../../Services/agent.service';
 import { agentDataModel } from '../../DataModels/agentData.model';
 import { MatSort } from '@angular/material/sort';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-agent',
@@ -53,7 +54,11 @@ export class AgentComponent implements OnInit {
   @ViewChild('matSortAgent') sortAgent!: MatSort;
   changeDet: any;
 
-  constructor(private dialog: MatDialog, private agentSerive: AgentService) {}
+  constructor(
+    private dialog: MatDialog,
+    private agentSerive: AgentService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.populateTable();
@@ -69,15 +74,75 @@ export class AgentComponent implements OnInit {
     });
   }
 
-  Delete() {
-    throw new Error('Method not implemented.');
+  Delete(data: Partial<agentDataModel>) {
+    const id = data.id;
+
+    const newAgent = { ...data } as Partial<agentDataModel>;
+    newAgent.status = 'inactive';
+    delete newAgent.id;
+
+    this.agentSerive.updateAgent(id!, newAgent).subscribe((val) => {
+      if (val === undefined) {
+        this.refreshTable(true);
+        this.openSnackBar('Agent Removed!', 'success-snackBar');
+      } else {
+        this.openSnackBar('Agent was not Removed!', 'error-snakcBar');
+      }
+    });
   }
 
-  Edit() {
-    throw new Error('Method not implemented.');
+  Edit(data: Partial<agentDataModel>) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = data;
+
+    this.dialog
+      .open(AgentAddEditDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
+        if (val == undefined) {
+          this.refreshTable(true);
+          this.openSnackBar('Agent Updated!', 'success-snackBar');
+        } else {
+          this.openSnackBar('Agent was not Updated!', 'error-snackBar');
+        }
+      });
   }
 
   Add() {
-    this.dialog.open(AgentAddEditDialogComponent);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = '';
+
+    this.dialog
+      .open(AgentAddEditDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
+        if (val) {
+          this.refreshTable(true);
+          this.openSnackBar('Agent Was Added!', 'success-snackBar');
+        } else {
+          this.openSnackBar('Agent was not Added!', 'error-snackBar');
+        }
+      });
+  }
+
+  openSnackBar(message: string, cssStyle: string) {
+    this.snackBar.open(message, '', {
+      duration: 2000,
+      panelClass: [cssStyle],
+    });
+  }
+
+  refreshTable(event: boolean) {
+    if (event) {
+      this.populateTable();
+    }
+  }
+
+  filterByDistrict(event: any) {
+    const selectedDistrict = event.value;
+    this.agentSerive.getAgentByDistrict(selectedDistrict).subscribe((data) => {
+      console.log(data);
+      this.dataSource.data = data;
+    });
   }
 }
