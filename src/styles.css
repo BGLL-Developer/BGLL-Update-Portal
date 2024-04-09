@@ -9,17 +9,23 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.success-snakBar {
+.success-snackBar {
   --mdc-snackbar-container-color: #673ab7;
   --mdc-snackbar-supporting-text-color: white;
   --mat-mdc-snack-bar-button-color: #00a673;
 }
 
-.error-snakBar {
+.error-snackBar {
   --mdc-snackbar-container-color: red;
   --mdc-snackbar-supporting-text-color: white;
   --mat-mdc-snack-bar-button-color: rgb(114, 2, 2);
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

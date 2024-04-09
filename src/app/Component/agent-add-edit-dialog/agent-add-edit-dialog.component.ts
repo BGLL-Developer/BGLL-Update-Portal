@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   FormsModule,
   NgForm,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
@@ -14,7 +15,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -44,12 +49,7 @@ export class AgentAddEditDialogComponent implements OnInit {
 
   communityControl = new FormControl();
 
-  agentAddEditForm = new FormGroup({
-    businessName: new FormControl(''),
-    address: new FormControl(''),
-    community: new FormControl(''),
-    district: new FormControl(''),
-  });
+  agentAddEditForm;
 
   communityOptions: string[] = [
     'Belize City',
@@ -298,11 +298,25 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Yemeri Grove',
   ];
   filteredOptions!: Observable<string[]>;
+  updateAgentID = '';
 
   constructor(
     public dialogRef: MatDialogRef<AgentAddEditDialogComponent>,
-    private agentSerive: AgentService
-  ) {}
+    private agentSerive: AgentService,
+    @Inject(MAT_DIALOG_DATA) agentData: agentDataModel
+  ) {
+    this.agentAddEditForm = new FormGroup({
+      businessName: new FormControl(
+        agentData.businessName,
+        Validators.required
+      ),
+      address: new FormControl(agentData.address, Validators.required),
+      community: new FormControl(agentData.community),
+      district: new FormControl(agentData.district, Validators.required),
+    });
+    this.communityControl.setValue(agentData.community);
+    this.updateAgentID = agentData.id;
+  }
 
   ngOnInit() {
     this.filteredOptions = this.communityControl.valueChanges.pipe(
@@ -323,21 +337,37 @@ export class AgentAddEditDialogComponent implements OnInit {
     this.dialogRef.close();
   }
   save() {
-    if (this.agentAddEditForm.valid) {
-      const newAgent = { ...this.agentAddEditForm.value } as agentDataModel;
-      newAgent.status = 'active';
-
-      console.log(newAgent);
+    if (this.updateAgentID) {
+      const updateAgentData = {
+        ...this.agentAddEditForm.value,
+      } as Partial<agentDataModel>;
+      if (updateAgentData.community != this.communityControl.value) {
+        updateAgentData.community = this.communityControl.value;
+      }
+      delete updateAgentData.id;
 
       this.agentSerive
-        .addAgent(newAgent)
-        .pipe(
-          tap((item) => {
-            this.agentAddEditForm.reset();
-            this.dialogRef.close();
-          })
-        )
-        .subscribe();
+        .updateAgent(this.updateAgentID, updateAgentData)
+        .subscribe((val) => {
+          this.agentAddEditForm.reset();
+          this.dialogRef.close(val);
+        });
+    } else {
+      if (this.agentAddEditForm.valid) {
+        const newAgent = { ...this.agentAddEditForm.value } as agentDataModel;
+        newAgent.status = 'active';
+        newAgent.community = this.communityControl.value;
+
+        this.agentSerive
+          .addAgent(newAgent)
+          .pipe(
+            tap((agentID) => {
+              this.agentAddEditForm.reset();
+              this.dialogRef.close(agentID);
+            })
+          )
+          .subscribe();
+      }
     }
   }
 }

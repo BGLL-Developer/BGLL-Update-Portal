@@ -36,4 +36,13 @@ export class AgentService {
   ): Observable<any> {
     return from(this.db.doc('/Agents/' + agentID).update(changes));
   }
+
+  getAgentByDistrict(district: string) {
+    return this.db
+      .collection('/Agents', (ref) =>
+        ref.where('status', '==', 'active').where('district', '==', district)
+      )
+      .get()
+      .pipe(map((snaps) => convertSnaps<agentDataModel>(snaps)));
+  }
 }

@@ -40,7 +40,6 @@
             [formControl]="communityControl"
             [matAutocomplete]="auto"
             formControlName="community"
-            required
           />
           <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             @for (option of filteredOptions | async; track option) {
@@ -54,12 +53,12 @@
         <mat-form-field>
           <mat-label>Select District</mat-label>
           <mat-select formControlName="district" required>
-            <mat-option value="corozal">Corozal</mat-option>
-            <mat-option value="orangewalk">OrangeWalk</mat-option>
-            <mat-option value="belize">Belize</mat-option>
-            <mat-option value="cayo">Cayo</mat-option>
-            <mat-option value="stanncreek">Stann Creek</mat-option>
-            <mat-option value="toledo">Toledo</mat-option>
+            <mat-option value="Corozal">Corozal</mat-option>
+            <mat-option value="Orange Walk">OrangeWalk</mat-option>
+            <mat-option value="Belize">Belize</mat-option>
+            <mat-option value="Cayo">Cayo</mat-option>
+            <mat-option value="Stann Creek">Stann Creek</mat-option>
+            <mat-option value="Toledo">Toledo</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -70,5 +69,12 @@
 <!--Control Buttons-->
 <mat-dialog-actions class="action-buttons mx-4 mb-4">
   <button mat-raised-button color="basic" (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="save()">Save</button>
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="!agentAddEditForm.valid"
+    (click)="save()"
+  >
+    Save
+  </button>
 </mat-dialog-actions>

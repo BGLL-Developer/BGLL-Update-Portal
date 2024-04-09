@@ -17,13 +17,13 @@
         <div id="filter-dropdown">
           <mat-form-field>
             <mat-label>Select District</mat-label>
-            <mat-select>
-              <mat-option value="corozal">Corozal</mat-option>
-              <mat-option value="orangewalk">OrangeWalk</mat-option>
-              <mat-option value="belize">Belize</mat-option>
-              <mat-option value="cayo">Cayo</mat-option>
-              <mat-option value="stanncreek">Stann Creek</mat-option>
-              <mat-option value="toledo">Toledo</mat-option>
+            <mat-select (selectionChange)="filterByDistrict($event)">
+              <mat-option value="Corozal">Corozal</mat-option>
+              <mat-option value="Orange Walk">OrangeWalk</mat-option>
+              <mat-option value="Belize">Belize</mat-option>
+              <mat-option value="Cayo">Cayo</mat-option>
+              <mat-option value="Stann Creek">Stann Creek</mat-option>
+              <mat-option value="Toledo">Toledo</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -90,11 +90,11 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="Edit()">
+                <button mat-menu-item (click)="Edit(element)">
                   <mat-icon>edit</mat-icon>
                   <span>Edit</span>
                 </button>
-                <button mat-menu-item (click)="Delete()">
+                <button mat-menu-item (click)="Delete(element)">
                   <mat-icon>delete</mat-icon>
                   <span>Delete</span>
                 </button>
