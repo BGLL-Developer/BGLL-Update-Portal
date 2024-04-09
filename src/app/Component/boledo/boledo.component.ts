@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +6,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import {
@@ -14,7 +14,10 @@ import {
   MatDialogConfig,
   MatDialogModule,
 } from '@angular/material/dialog';
+import { boledoDataModel } from '../../DataModels/boledoData.model';
+import { BoledoService } from '../../Services/boledo.service';
 import { BoledoAddEditDialogComponent } from '../boledo-add-edit-dialog/boledo-add-edit-dialog.component';
+import { FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'app-boledo',
@@ -35,9 +38,37 @@ import { BoledoAddEditDialogComponent } from '../boledo-add-edit-dialog/boledo-a
     MatMenuModule,
   ],
 })
-export class BoledoComponent {
+export class BoledoComponent implements OnInit {
+
+  constructor(private dialog: MatDialog, private boledoService: BoledoService) {}
+
+  displayedColumns: string[] = [
+    'date', 
+    'winningNumber',  
+    'action'
+  ];
+  
+  dataSource = new MatTableDataSource<boledoDataModel>();
+  
+  ngOnInit(): void {
+    
+    this.populateTable();
+    
+  }
+  populateTable() {
+    this.boledoService.getAllBoledoEntries('active').subscribe((data) => {
+      this.dataSource.data = data;
+    });
+  }
+
+  dateFilter(dateFilterInput: string) {
+      this.boledoService.getBoledo(dateFilterInput.toString()).subscribe((data) => {
+        this.dataSource.data = data;
+      });
+    }
+
   Delete() {
-    throw new Error('Method not implemented.');
+    
   }
   Edit() {
     const dialogConfig = new MatDialogConfig();
@@ -46,21 +77,9 @@ export class BoledoComponent {
 
     this.dialog.open(BoledoAddEditDialogComponent, dialogConfig);
   }
-  constructor(private dialog: MatDialog) {}
 
   Add() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = 'auto';
-    dialogConfig.minHeight = 'auto';
-
-    this.dialog.open(BoledoAddEditDialogComponent, dialogConfig);
+    
+    this.dialog.open(BoledoAddEditDialogComponent);
   }
-
-  @Input() displayedColumns: string[] = ['date', 'number', 'action'];
-  dataSource = [
-    { date: '2024-03-01', number: '12345' },
-    { date: '2024-03-02', number: '54321' },
-  ];
 }

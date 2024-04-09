@@ -72,7 +72,7 @@ export class AgentAddEditDialogComponent implements OnInit {
     'La Democracia',
     'Ladyville',
     'Lemonal',
-    "Lord's Bank",
+    'Lords Bank',
     'Lucky Strike',
     'Mahogany Heights',
     'Maskall',

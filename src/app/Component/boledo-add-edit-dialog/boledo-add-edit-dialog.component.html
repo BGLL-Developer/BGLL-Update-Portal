@@ -1,1 +1,40 @@
-<p>boledo-add-edit-dialog works!</p>
+<mat-dialog-content class="px-4">
+    <form >
+      <h2 class="mb-4 text-center">{{ title }}</h2>
+      <div class="row">
+        <!--Business Name Input-->
+        <div class="col">
+            <mat-form-field>
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" #dateInput formControlName="date" />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+        </div>
+        <!--Address Input-->
+        <div class="col">
+          <mat-form-field>
+            <mat-label>Enter Winning Numbers: </mat-label>
+            <input
+              matInput
+             formControlName="winningNumber"
+              required
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+      </div>
+    </form>
+  </mat-dialog-content>
+  
+  <!--Control Buttons-->
+  <mat-dialog-actions class="action-buttons mx-4 mb-4">
+    <button mat-raised-button color="basic" (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
+  </mat-dialog-actions>
+  
