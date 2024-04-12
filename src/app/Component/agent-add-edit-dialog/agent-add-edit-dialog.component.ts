@@ -45,7 +45,7 @@ import { agentDataModel } from '../../DataModels/agentData.model';
   styleUrl: './agent-add-edit-dialog.component.css',
 })
 export class AgentAddEditDialogComponent implements OnInit {
-  title = 'New Agent';
+  title = '';
 
   communityControl = new FormControl();
 
@@ -302,7 +302,7 @@ export class AgentAddEditDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AgentAddEditDialogComponent>,
-    private agentSerive: AgentService,
+    private agentService: AgentService,
     @Inject(MAT_DIALOG_DATA) agentData: agentDataModel
   ) {
     this.agentAddEditForm = new FormGroup({
@@ -316,6 +316,11 @@ export class AgentAddEditDialogComponent implements OnInit {
     });
     this.communityControl.setValue(agentData.community);
     this.updateAgentID = agentData.id;
+    if(this.updateAgentID == '' || this.updateAgentID == undefined || this.updateAgentID == null) {
+      this.title = 'New Agent';
+    } else {
+      this.title = 'Update Agent';
+    }
   }
 
   ngOnInit() {
@@ -346,7 +351,7 @@ export class AgentAddEditDialogComponent implements OnInit {
       }
       delete updateAgentData.id;
 
-      this.agentSerive
+      this.agentService
         .updateAgent(this.updateAgentID, updateAgentData)
         .subscribe((val) => {
           this.agentAddEditForm.reset();
@@ -358,7 +363,7 @@ export class AgentAddEditDialogComponent implements OnInit {
         newAgent.status = 'active';
         newAgent.community = this.communityControl.value;
 
-        this.agentSerive
+        this.agentService
           .addAgent(newAgent)
           .pipe(
             tap((agentID) => {

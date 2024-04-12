@@ -2,7 +2,7 @@ export interface jackpotDataModel {
   id: string;
   date: string;
   firstWinningNumber: number;
-  secondtWinningNumber: number;
+  secondWinningNumber: number;
   thirdWinningNumber: number;
   status: string;
 }

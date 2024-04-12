@@ -18,6 +18,7 @@ import { boledoDataModel } from '../../DataModels/boledoData.model';
 import { BoledoService } from '../../Services/boledo.service';
 import { BoledoAddEditDialogComponent } from '../boledo-add-edit-dialog/boledo-add-edit-dialog.component';
 import { FormControlName } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-boledo',
@@ -39,47 +40,94 @@ import { FormControlName } from '@angular/forms';
   ],
 })
 export class BoledoComponent implements OnInit {
+  constructor(
+    private dialog: MatDialog,
+    private boledoService: BoledoService,
+    private snackBar: MatSnackBar
+  ) {}
 
-  constructor(private dialog: MatDialog, private boledoService: BoledoService) {}
+  displayedColumns: string[] = ['date', 'winningNumber', 'action'];
 
-  displayedColumns: string[] = [
-    'date', 
-    'winningNumber',  
-    'action'
-  ];
-  
   dataSource = new MatTableDataSource<boledoDataModel>();
-  
+
   ngOnInit(): void {
-    
     this.populateTable();
-    
   }
   populateTable() {
-    this.boledoService.getAllBoledoEntries('active').subscribe((data) => {
+    this.boledoService.getAllBoledo('active').subscribe((data) => {
       this.dataSource.data = data;
     });
   }
 
   dateFilter(dateFilterInput: string) {
-      this.boledoService.getBoledo(dateFilterInput.toString()).subscribe((data) => {
+    this.boledoService
+      .getBoledoByDate(dateFilterInput.toString())
+      .subscribe((data) => {
         this.dataSource.data = data;
       });
-    }
-
-  Delete() {
-    
   }
-  Edit() {
+
+  Delete(data: Partial<boledoDataModel>) {
+    const id = data.id;
+
+    const newBoledoEntry = { ...data } as Partial<boledoDataModel>;
+    newBoledoEntry.status = 'inactive';
+    delete newBoledoEntry.id;
+
+    this.boledoService
+      .updateBoledoEntry(id!, newBoledoEntry)
+      .subscribe((val) => {
+        if (val === undefined) {
+          this.refreshTable(true);
+          this.openSnackBar('Entry removed successfully.', 'success-snackBar');
+        } else {
+          this.openSnackBar('Entry was not Removed!', 'error-snakcBar');
+        }
+      });
+  }
+  refreshTable(event: boolean) {
+    if (event) {
+      this.populateTable();
+    }
+  }
+  openSnackBar(message: string, cssStyle: string) {
+    this.snackBar.open(message, '', {
+      duration: 2000,
+      panelClass: [cssStyle],
+    });
+  }
+  Edit(data: Partial<boledoDataModel>) {
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = data;
 
-    dialogConfig.data = this.dataSource;
-
-    this.dialog.open(BoledoAddEditDialogComponent, dialogConfig);
+    this.dialog
+      .open(BoledoAddEditDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
+        if (val == undefined) {
+          this.refreshTable(true);
+          this.openSnackBar('Updated successfully!', 'success-snackBar');
+        } else {
+          this.openSnackBar('Update fail!', 'error-snackBar');
+        }
+      });
   }
 
   Add() {
-    
-    this.dialog.open(BoledoAddEditDialogComponent);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = '';
+    dialogConfig.width;
+
+    this.dialog
+      .open(BoledoAddEditDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
+        if (val) {
+          this.refreshTable(true);
+          this.openSnackBar('New Boledo Entry Was Added!', 'success-snackBar');
+        } else {
+          this.openSnackBar('New Boledo was not Added!', 'error-snackBar');
+        }
+      });
   }
 }

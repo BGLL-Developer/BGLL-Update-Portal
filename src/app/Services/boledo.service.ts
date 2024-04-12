@@ -8,24 +8,41 @@ import { boledoDataModel } from '../DataModels/boledoData.model';
   providedIn: 'root',
 })
 export class BoledoService {
-  
   constructor(private db: AngularFirestore) {}
 
-
-  getBoledo(filterDate: string) {
-    return this.db
-    .collection('/Boledo', (ref) => ref.where('date', '==', filterDate))
-    .get()
-    .pipe(map((snaps) => convertSnaps<boledoDataModel>(snaps)));
+  updateBoledoEntry(
+    boledoID: string,
+    changes: Partial<boledoDataModel>
+  ): Observable<any> {
+    return from(this.db.doc('/Boledo/' + boledoID).update(changes));
   }
 
-  getAllBoledoEntries(status: string) {
+  getBoledoByDate(filterDate: string) {
     return this.db
-    .collection('/Boledo', (ref) => ref.where('status', '==', status))
-    .get()
-    .pipe(map((snaps) => convertSnaps<boledoDataModel>(snaps)));
+      .collection('/Boledo', (ref) =>
+        ref.where('status', '==', 'active').where('date', '==', filterDate)
+      )
+      .get()
+      .pipe(map((snaps) => convertSnaps<boledoDataModel>(snaps)));
   }
 
+  getAllBoledo(status: string) {
+    return this.db
+      .collection('/Boledo', (ref) => ref.where('status', '==', status))
+      .get()
+      .pipe(map((snaps) => convertSnaps<boledoDataModel>(snaps)));
+  }
 
+  addNewBoledo(newBoledoEntry: Partial<boledoDataModel>) {
+    let savedBoledo$: Observable<any>;
 
+    savedBoledo$ = from(this.db.collection('/Boledo').add(newBoledoEntry));
+    return savedBoledo$.pipe(
+      map((res) => {
+        return {
+          id: res.id,
+        };
+      })
+    );
+  }
 }

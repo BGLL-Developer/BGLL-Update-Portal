@@ -1,4 +1,6 @@
 #AddButton {
+  display: flex;
+  justify-content: right;
   float: right;
 }
 
