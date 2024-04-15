@@ -19,7 +19,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { jackpotDataModel } from '../../DataModels/jackpotData.model';
 import { JackpotService } from '../../Services/jackpot.service';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-jackpot',
@@ -39,6 +39,7 @@ import { MatSort } from '@angular/material/sort';
     MatDialogModule,
     MatMenuModule,
     MatSelectModule,
+    MatSortModule,
   ],
 })
 export class JackpotComponent implements OnInit {
@@ -54,22 +55,27 @@ export class JackpotComponent implements OnInit {
     'number2',
     'number3',
     'action',
-  ];
-  dataSource = new MatTableDataSource<jackpotDataModel>();
-
-  @ViewChild('matSortLottery') SortLottery!: MatSort;
+  ]; // Columns to be displayed in the table
+  dataSource = new MatTableDataSource<jackpotDataModel>(); // DataSource for MatTable
+  @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
-    this.populateTable();
+    this.populateTable(); // Populate the table with jackpot data
   }
 
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  // Populate the table with jackpot data
   populateTable() {
     this.jackpotService.getAllJackpots('active').subscribe((data) => {
       this.dataSource.data = data;
     });
   }
 
-  Delete(data: Partial<jackpotDataModel>) {
+  // Delete a jackpot
+  deleteJackpot(data: Partial<jackpotDataModel>) {
     const id = data.id;
 
     const newJackpot = { ...data } as Partial<jackpotDataModel>;
@@ -79,14 +85,18 @@ export class JackpotComponent implements OnInit {
     this.jackpotService.updateJackpot(id!, newJackpot).subscribe((val) => {
       if (val === undefined) {
         this.refreshTable(true);
-        this.openSnackBar('Jackpot removed successfully!', 'success-snackBar');
+        this.openSnackBar(
+          'Winning Number Deleted Successfully!',
+          'success-snackBar'
+        );
       } else {
-        this.openSnackBar('Jackpot removal unsuccessful!', 'error-snakcBar');
+        this.openSnackBar('Winning Number was not Deleted!', 'error-snakcBar');
       }
     });
   }
 
-  Edit(data: Partial<jackpotDataModel>) {
+  // Edit a jackpot
+  editJackpot(data: Partial<jackpotDataModel>) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
 
@@ -94,19 +104,20 @@ export class JackpotComponent implements OnInit {
       .open(JackpotAddEditDialogComponent, dialogConfig)
       .afterClosed()
       .subscribe((val) => {
-        if (val == undefined) {
+        if (val) {
           this.refreshTable(true);
           this.openSnackBar(
-            'Jackpot updated successfully!',
+            'Winning Number Updated Successfully!',
             'success-snackBar'
           );
         } else {
-          this.openSnackBar('Jackpot Update Failed!', 'error-snackBar');
+          this.openSnackBar('Winning Number Update Failed!', 'error-snackBar');
         }
       });
   }
 
-  Add() {
+  // Add a new jackpot
+  addJackpot() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = '';
 
@@ -116,13 +127,17 @@ export class JackpotComponent implements OnInit {
       .subscribe((val) => {
         if (val) {
           this.refreshTable(true);
-          this.openSnackBar('Jackpot added successfully!', 'success-snackBar');
+          this.openSnackBar(
+            'Winning Number Saved Successfully!',
+            'success-snackBar'
+          );
         } else {
-          this.openSnackBar('Failed to add Jackpot!', 'error-snackBar');
+          this.openSnackBar('Winning Number was not Saved!', 'error-snackBar');
         }
       });
   }
 
+  // Open a snack bar with a message
   openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
       duration: 2000,
@@ -130,12 +145,14 @@ export class JackpotComponent implements OnInit {
     });
   }
 
+  // Refresh the table
   refreshTable(event: boolean) {
     if (event) {
       this.populateTable();
     }
   }
 
+  // Filter jackpots by date
   dateFilter(dateFilterInput: string) {
     this.jackpotService
       .getJackpotByDate(dateFilterInput.toString())

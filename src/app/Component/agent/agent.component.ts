@@ -48,33 +48,34 @@ export class AgentComponent implements OnInit {
     'community',
     'district',
     'action',
-  ];
-
-  dataSource = new MatTableDataSource<agentDataModel>();
-  @ViewChild('matSortAgent') sortAgent!: MatSort;
-  changeDet: any;
+  ]; // Columns to be displayed in the table
+  dataSource = new MatTableDataSource<agentDataModel>(); // DataSource for MatTable
+  @ViewChild('matSortAgent') sortAgent!: MatSort; // Reference to MatSort
+  changeDet: any; // Change detector reference
 
   constructor(
-    private dialog: MatDialog,
-    private agentSerive: AgentService,
-    private snackBar: MatSnackBar
+    private dialog: MatDialog, // MatDialog for opening dialogs
+    private agentSerive: AgentService, // AgentService for CRUD operations
+    private snackBar: MatSnackBar // MatSnackBar for displaying snack bar messages
   ) {}
 
   ngOnInit(): void {
-    this.populateTable();
+    this.populateTable(); // Populate the table with agent data
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sortAgent;
+    this.dataSource.sort = this.sortAgent; // Assign MatSort to the DataSource after view initialization
   }
 
+  // Populate the table with agent data
   populateTable() {
     this.agentSerive.getAllAgents('active').subscribe((data) => {
       this.dataSource.data = data;
     });
   }
 
-  Delete(data: Partial<agentDataModel>) {
+  // Delete an agent
+  deleteAgent(data: Partial<agentDataModel>) {
     const id = data.id;
 
     const newAgent = { ...data } as Partial<agentDataModel>;
@@ -91,7 +92,8 @@ export class AgentComponent implements OnInit {
     });
   }
 
-  Edit(data: Partial<agentDataModel>) {
+  // Edit an agent
+  editAgent(data: Partial<agentDataModel>) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
 
@@ -99,7 +101,7 @@ export class AgentComponent implements OnInit {
       .open(AgentAddEditDialogComponent, dialogConfig)
       .afterClosed()
       .subscribe((val) => {
-        if (val == undefined) {
+        if (val) {
           this.refreshTable(true);
           this.openSnackBar('Agent Updated!', 'success-snackBar');
         } else {
@@ -108,7 +110,8 @@ export class AgentComponent implements OnInit {
       });
   }
 
-  Add() {
+  // Add a new agent
+  addAgent() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = '';
 
@@ -125,6 +128,7 @@ export class AgentComponent implements OnInit {
       });
   }
 
+  // Open a snack bar with a message
   openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
       duration: 2000,
@@ -132,12 +136,14 @@ export class AgentComponent implements OnInit {
     });
   }
 
+  // Refresh the table
   refreshTable(event: boolean) {
     if (event) {
       this.populateTable();
     }
   }
 
+  // Filter agents by district
   filterByDistrict(event: any) {
     const selectedDistrict = event.value;
     this.agentSerive.getAgentByDistrict(selectedDistrict).subscribe((data) => {

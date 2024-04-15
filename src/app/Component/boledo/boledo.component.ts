@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import {
   MatDialog,
   MatDialogConfig,
@@ -17,7 +18,6 @@ import {
 import { boledoDataModel } from '../../DataModels/boledoData.model';
 import { BoledoService } from '../../Services/boledo.service';
 import { BoledoAddEditDialogComponent } from '../boledo-add-edit-dialog/boledo-add-edit-dialog.component';
-import { FormControlName } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -37,28 +37,39 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatDividerModule,
     MatDialogModule,
     MatMenuModule,
+    MatSortModule,
   ],
 })
 export class BoledoComponent implements OnInit {
+  // Define displayed columns
+  displayedColumns: string[] = ['date', 'winningNumber', 'action'];
+  // Define data source for MatTable
+  dataSource = new MatTableDataSource<boledoDataModel>();
+  @ViewChild(MatSort) sort!: MatSort;
+
   constructor(
     private dialog: MatDialog,
     private boledoService: BoledoService,
     private snackBar: MatSnackBar
   ) {}
 
-  displayedColumns: string[] = ['date', 'winningNumber', 'action'];
-
-  dataSource = new MatTableDataSource<boledoDataModel>();
-
   ngOnInit(): void {
+    // Populate table on component initialization
     this.populateTable();
   }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  // Function to populate the table with data
   populateTable() {
     this.boledoService.getAllBoledo('active').subscribe((data) => {
       this.dataSource.data = data;
     });
   }
 
+  // Function to filter data by date
   dateFilter(dateFilterInput: string) {
     this.boledoService
       .getBoledoByDate(dateFilterInput.toString())
@@ -67,36 +78,54 @@ export class BoledoComponent implements OnInit {
       });
   }
 
-  Delete(data: Partial<boledoDataModel>) {
+  // Function to delete data
+  deleteBoledo(data: Partial<boledoDataModel>) {
     const id = data.id;
 
-    const newBoledoEntry = { ...data } as Partial<boledoDataModel>;
-    newBoledoEntry.status = 'inactive';
+    const newBoledoEntry = {
+      ...data,
+      status: 'inactive',
+    } as Partial<boledoDataModel>;
     delete newBoledoEntry.id;
 
     this.boledoService
       .updateBoledoEntry(id!, newBoledoEntry)
       .subscribe((val) => {
         if (val === undefined) {
+          // Refresh table if successful and show success message
           this.refreshTable(true);
-          this.openSnackBar('Entry removed successfully.', 'success-snackBar');
+          this.openSnackBar(
+            'Winning Number Deleted Successfully!',
+            'success-snackBar'
+          );
         } else {
-          this.openSnackBar('Entry was not Removed!', 'error-snakcBar');
+          // Show error message if deletion failed
+          this.openSnackBar(
+            'Winning Number was not Deleted!',
+            'error-snackBar'
+          );
         }
       });
   }
+
+  // Function to refresh table data
   refreshTable(event: boolean) {
     if (event) {
+      // Call populateTable() to refresh data
       this.populateTable();
     }
   }
+
+  // Function to display snackbar
   openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
       duration: 2000,
       panelClass: [cssStyle],
     });
   }
-  Edit(data: Partial<boledoDataModel>) {
+
+  // Function to edit data
+  editBoledo(data: Partial<boledoDataModel>) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
 
@@ -104,29 +133,39 @@ export class BoledoComponent implements OnInit {
       .open(BoledoAddEditDialogComponent, dialogConfig)
       .afterClosed()
       .subscribe((val) => {
-        if (val == undefined) {
+        if (val) {
+          // Refresh table if successful and show success message
           this.refreshTable(true);
-          this.openSnackBar('Updated successfully!', 'success-snackBar');
+          this.openSnackBar(
+            'Winning Number Updated Successfully!',
+            'success-snackBar'
+          );
         } else {
-          this.openSnackBar('Update fail!', 'error-snackBar');
+          // Show error message if update failed
+          this.openSnackBar('Winning Number Update Failed!', 'error-snackBar');
         }
       });
   }
 
-  Add() {
+  // Function to add new data
+  addBoledo() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = '';
-    dialogConfig.width;
 
     this.dialog
       .open(BoledoAddEditDialogComponent, dialogConfig)
       .afterClosed()
       .subscribe((val) => {
         if (val) {
+          // Refresh table if successful and show success message
           this.refreshTable(true);
-          this.openSnackBar('New Boledo Entry Was Added!', 'success-snackBar');
+          this.openSnackBar(
+            'Winning Number Saved Successfully!',
+            'success-snackBar'
+          );
         } else {
-          this.openSnackBar('New Boledo was not Added!', 'error-snackBar');
+          // Show error message if save failed
+          this.openSnackBar('Winning Number was not Saved!', 'error-snackBar');
         }
       });
   }

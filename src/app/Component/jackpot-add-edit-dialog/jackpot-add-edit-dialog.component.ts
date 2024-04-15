@@ -1,6 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,31 +37,38 @@ import { jackpotDataModel } from '../../DataModels/jackpotData.model';
   styleUrl: './jackpot-add-edit-dialog.component.css',
 })
 export class JackpotAddEditDialogComponent {
-  title = '';
-  jackpotAddEditForm;
-  updateJackpotID = '';
+  title: string = ''; // Title for the dialog
+  jackpotAddEditForm: FormGroup; // Form group for jackpot add/edit form
+  updateJackpotID: string = ''; // ID of the jackpot being updated
+  defaultDate = this.jackpotData.date // Default date if provided, otherwise current date
+    ? new Date(this.jackpotData.date)
+    : new Date();
 
   constructor(
-    public dialogRef: MatDialogRef<JackpotAddEditDialogComponent>,
+    public dialogRef: MatDialogRef<JackpotAddEditDialogComponent>, // Reference to the dialog
     private jackpotService: JackpotService,
-    @Inject(MAT_DIALOG_DATA) jackpotData: jackpotDataModel
+    @Inject(MAT_DIALOG_DATA) private jackpotData: jackpotDataModel // Injecting data into dialog
   ) {
+    // Initializing form group with default values and validators
     this.jackpotAddEditForm = new FormGroup({
-      date: new FormControl(jackpotData.date, Validators.required),
-      firstWinningNumber: new FormControl(
-        jackpotData.firstWinningNumber,
-        Validators.required
-      ),
+      date: new FormControl(this.defaultDate, Validators.required),
+      firstWinningNumber: new FormControl(this.jackpotData.firstWinningNumber, [
+        Validators.required,
+        this.fourDigitValidator,
+      ]),
       secondWinningNumber: new FormControl(
-        jackpotData.secondWinningNumber,
-        Validators.required
+        this.jackpotData.secondWinningNumber,
+        [Validators.required, this.fourDigitValidator]
       ),
-      thirdWinningNumber: new FormControl(
-        jackpotData.thirdWinningNumber,
-        Validators.required
-      ),
+      thirdWinningNumber: new FormControl(this.jackpotData.thirdWinningNumber, [
+        Validators.required,
+        this.fourDigitValidator,
+      ]),
     });
-    this.updateJackpotID = jackpotData.id;
+
+    this.updateJackpotID = jackpotData.id; // Setting update jackpot ID
+
+    // Setting dialog title based on whether it's an update or add operation
     if (
       this.updateJackpotID == '' ||
       this.updateJackpotID == undefined ||
@@ -68,33 +80,55 @@ export class JackpotAddEditDialogComponent {
     }
   }
 
+  // Custom validator function for ensuring four digits
+  private fourDigitValidator(
+    control: AbstractControl
+  ): { [key: string]: any } | null {
+    const value = control.value;
+    if (isNaN(value) || value < 0 || value > 9999) {
+      return { invalidNumber: true };
+    }
+    return null;
+  }
+
+  // Save changes to the jackpot
   save() {
     if (this.updateJackpotID) {
+      // Updating existing jackpot entry
       const updateJackpotData = {
         ...this.jackpotAddEditForm.value,
       } as Partial<jackpotDataModel>;
 
+      updateJackpotData.date = new Date(
+        updateJackpotData.date!
+      ).toLocaleDateString();
+
       delete updateJackpotData.id;
 
+      // Calling service to update jackpot
       this.jackpotService
         .updateJackpot(this.updateJackpotID, updateJackpotData)
         .subscribe((val) => {
           this.jackpotAddEditForm.reset();
-          this.dialogRef.close(val);
+          this.dialogRef.close('success');
         });
     } else {
+      // Adding new jackpot entry
       if (this.jackpotAddEditForm.valid) {
         const newJackpot = {
           ...this.jackpotAddEditForm.value,
         } as jackpotDataModel;
-        newJackpot.status = 'active';
 
+        newJackpot.status = 'active';
+        newJackpot.date = new Date(newJackpot.date).toLocaleDateString();
+
+        // Calling service to add new jackpot
         this.jackpotService
           .addJackpot(newJackpot)
           .pipe(
             tap((jackpotID) => {
               this.jackpotAddEditForm.reset();
-              this.dialogRef.close(jackpotID);
+              this.dialogRef.close('success');
             })
           )
           .subscribe();
@@ -102,6 +136,7 @@ export class JackpotAddEditDialogComponent {
     }
   }
 
+  // Close the dialog without saving changes
   cancel() {
     this.dialogRef.close();
   }

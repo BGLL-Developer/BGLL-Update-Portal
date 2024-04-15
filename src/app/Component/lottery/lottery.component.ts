@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 import {
   MatDialog,
@@ -38,6 +39,7 @@ import { lotteryDataModel } from '../../DataModels/lotteryData.model';
     MatDialogModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatSortModule,
   ],
 })
 export class LotteryComponent implements OnInit {
@@ -47,20 +49,27 @@ export class LotteryComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  @Input() displayedColumns: string[] = ['date', 'number', 'action'];
-  dataSource = new MatTableDataSource<lotteryDataModel>();
+  @Input() displayedColumns: string[] = ['date', 'number', 'action']; // Input property for displayed columns
+  dataSource = new MatTableDataSource<lotteryDataModel>(); // Data source for MatTable
+  @ViewChild(MatSort) sort!: MatSort; // ViewChild for sorting
 
   ngOnInit(): void {
-    this.populateTable();
+    this.populateTable(); // Initializing component by populating table data
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort; // Assigning sort to dataSource after view initialization
   }
 
   populateTable() {
+    // Fetching all active lotteries from service and updating dataSource
     this.lotteryService.getAllLotteries('active').subscribe((data) => {
       this.dataSource.data = data;
     });
   }
 
   Delete(data: Partial<lotteryDataModel>) {
+    // Deleting a lottery entry
     const id = data.id;
 
     const newLottery = { ...data } as Partial<lotteryDataModel>;
@@ -69,15 +78,21 @@ export class LotteryComponent implements OnInit {
 
     this.lotteryService.updateLottery(id!, newLottery).subscribe((val) => {
       if (val === undefined) {
+        // Refreshing table and showing success message
         this.refreshTable(true);
-        this.openSnackBar('Lottery removed Successfully!', 'success-snackBar');
+        this.openSnackBar(
+          'Winning Number Deleted Successfully!',
+          'success-snackBar'
+        );
       } else {
-        this.openSnackBar('Failed to remove Lottery!', 'error-snakcBar');
+        // Showing error message
+        this.openSnackBar('Winning Number was not Deleted!', 'error-snakcBar');
       }
     });
   }
 
   Edit(data: Partial<lotteryDataModel>) {
+    // Opening dialog for editing a lottery entry
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
 
@@ -85,16 +100,22 @@ export class LotteryComponent implements OnInit {
       .open(LotteryAddEditDialogComponent, dialogConfig)
       .afterClosed()
       .subscribe((val) => {
-        if (val == undefined) {
+        if (val) {
+          // Refreshing table and showing success message
           this.refreshTable(true);
-          this.openSnackBar('Updated successfully!', 'success-snackBar');
+          this.openSnackBar(
+            'Winning Number Updated Successfully!',
+            'success-snackBar'
+          );
         } else {
-          this.openSnackBar('Failed to update!', 'error-snackBar');
+          // Showing error message
+          this.openSnackBar('Winning Number Update Failed!', 'error-snackBar');
         }
       });
   }
 
   Add() {
+    // Opening dialog for adding a new lottery entry
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = '';
     dialogConfig.width;
@@ -104,18 +125,21 @@ export class LotteryComponent implements OnInit {
       .afterClosed()
       .subscribe((val) => {
         if (val) {
+          // Refreshing table and showing success message
           this.refreshTable(true);
           this.openSnackBar(
-            'New Lottery was Added Successfully!',
+            'Winning Number Saved Successfully!',
             'success-snackBar'
           );
         } else {
-          this.openSnackBar('Failed to Add Lottery!', 'error-snackBar');
+          // Showing error message
+          this.openSnackBar('Winning Number was not Saved!', 'error-snackBar');
         }
       });
   }
 
   openSnackBar(message: string, cssStyle: string) {
+    // Opening snackbar with given message and CSS style
     this.snackBar.open(message, '', {
       duration: 2000,
       panelClass: [cssStyle],
@@ -123,12 +147,14 @@ export class LotteryComponent implements OnInit {
   }
 
   refreshTable(event: boolean) {
+    // Refreshing table if event is true
     if (event) {
       this.populateTable();
     }
   }
 
   dateFilter(dateFilterInput: string) {
+    // Filtering lotteries by date
     this.lotteryService
       .getLotteryByDate(dateFilterInput.toString())
       .subscribe((data) => {

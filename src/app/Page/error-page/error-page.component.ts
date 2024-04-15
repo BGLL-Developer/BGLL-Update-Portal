@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { HeaderComponent } from '../../Component/header/header.component';
 
 @Component({
   selector: 'app-error-page',
   standalone: true,
-  imports: [],
+  imports: [HeaderComponent],
   templateUrl: './error-page.component.html',
-  styleUrl: './error-page.component.css'
+  styleUrl: './error-page.component.css',
 })
-export class ErrorPageComponent {
-
-}
+export class ErrorPageComponent {}

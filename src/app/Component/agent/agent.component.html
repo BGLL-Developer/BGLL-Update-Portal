@@ -37,7 +37,7 @@
             mat-mini-fab
             color="accent"
             aria-label="add button"
-            (click)="Add()"
+            (click)="addAgent()"
           >
             <mat-icon>add</mat-icon>
           </button>
@@ -90,11 +90,11 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="Edit(element)">
+                <button mat-menu-item (click)="editAgent(element)">
                   <mat-icon>edit</mat-icon>
                   <span>Edit</span>
                 </button>
-                <button mat-menu-item (click)="Delete(element)">
+                <button mat-menu-item (click)="deleteAgent(element)">
                   <mat-icon>delete</mat-icon>
                   <span>Delete</span>
                 </button>

@@ -45,12 +45,10 @@ import { agentDataModel } from '../../DataModels/agentData.model';
   styleUrl: './agent-add-edit-dialog.component.css',
 })
 export class AgentAddEditDialogComponent implements OnInit {
-  title = '';
-
-  communityControl = new FormControl();
-
-  agentAddEditForm;
-
+  title = ''; // Title for the dialog
+  communityControl = new FormControl(); // FormControl for community input
+  agentAddEditForm; // FormGroup for agent add/edit form
+  // Array of community options
   communityOptions: string[] = [
     'Belize City',
     'Bermudian Landing',
@@ -297,8 +295,8 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Wilson Road',
     'Yemeri Grove',
   ];
-  filteredOptions!: Observable<string[]>;
-  updateAgentID = '';
+  filteredOptions!: Observable<string[]>; // Observable for filtered community options
+  updateAgentID = ''; // ID of the agent being updated
 
   constructor(
     public dialogRef: MatDialogRef<AgentAddEditDialogComponent>,
@@ -316,7 +314,11 @@ export class AgentAddEditDialogComponent implements OnInit {
     });
     this.communityControl.setValue(agentData.community);
     this.updateAgentID = agentData.id;
-    if(this.updateAgentID == '' || this.updateAgentID == undefined || this.updateAgentID == null) {
+    if (
+      this.updateAgentID == '' ||
+      this.updateAgentID == undefined ||
+      this.updateAgentID == null
+    ) {
       this.title = 'New Agent';
     } else {
       this.title = 'Update Agent';
@@ -324,12 +326,13 @@ export class AgentAddEditDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Set up filtered options observable for community input
     this.filteredOptions = this.communityControl.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || ''))
     );
   }
-
+  // Filter community options based on input value
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
@@ -337,38 +340,43 @@ export class AgentAddEditDialogComponent implements OnInit {
       option.toLowerCase().includes(filterValue)
     );
   }
-
+  // Cancel and close the dialog
   cancel() {
     this.dialogRef.close();
   }
+  // Save agent data
   save() {
     if (this.updateAgentID) {
+      // Update existing agent
       const updateAgentData = {
         ...this.agentAddEditForm.value,
       } as Partial<agentDataModel>;
       if (updateAgentData.community != this.communityControl.value) {
         updateAgentData.community = this.communityControl.value;
       }
-      delete updateAgentData.id;
+      delete updateAgentData.id; // Remove ID field
 
+      // Call service to update agent
       this.agentService
         .updateAgent(this.updateAgentID, updateAgentData)
         .subscribe((val) => {
-          this.agentAddEditForm.reset();
-          this.dialogRef.close(val);
+          this.agentAddEditForm.reset(); // Reset form
+          this.dialogRef.close('Success'); // Close dialog with updated data
         });
     } else {
       if (this.agentAddEditForm.valid) {
+        // Add new agent
         const newAgent = { ...this.agentAddEditForm.value } as agentDataModel;
-        newAgent.status = 'active';
-        newAgent.community = this.communityControl.value;
+        newAgent.status = 'active'; // Set status to active
+        newAgent.community = this.communityControl.value; // Set community
 
+        // Call service to add new agent
         this.agentService
           .addAgent(newAgent)
           .pipe(
             tap((agentID) => {
-              this.agentAddEditForm.reset();
-              this.dialogRef.close(agentID);
+              this.agentAddEditForm.reset(); // Reset form
+              this.dialogRef.close('Success'); // Close dialog with new agent ID
             })
           )
           .subscribe();
