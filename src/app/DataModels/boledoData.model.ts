@@ -3,4 +3,6 @@ export interface boledoDataModel {
   date: string;
   winningNumber: number;
   status: string;
+  createdBy: string;
+  editedBy: string;
 }

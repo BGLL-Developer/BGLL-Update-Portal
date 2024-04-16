@@ -5,4 +5,6 @@ export interface jackpotDataModel {
   secondWinningNumber: number;
   thirdWinningNumber: number;
   status: string;
+  createdBy: string;
+  editedBy: string;
 }

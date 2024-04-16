@@ -50,6 +50,7 @@ export class LoginComponent {
         error: (err) => {
           console.log(err);
           this.errorMessage = 'Invalid Email and Passowrd';
+          this.loginForm.reset();
         },
       });
     } else {

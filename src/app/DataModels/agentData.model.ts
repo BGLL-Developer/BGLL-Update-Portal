@@ -5,4 +5,6 @@ export interface agentDataModel {
   community: string;
   district: string;
   status: string;
+  createdBy: string;
+  editedBy: string;
 }
