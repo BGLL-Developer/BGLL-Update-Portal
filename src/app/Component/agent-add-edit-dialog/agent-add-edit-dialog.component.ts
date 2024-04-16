@@ -25,6 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { AgentService } from '../../Services/agent.service';
 import { agentDataModel } from '../../DataModels/agentData.model';
+import { GlobalService } from '../../Services/global.service';
 
 @Component({
   selector: 'app-agent-add-edit-dialog',
@@ -301,7 +302,8 @@ export class AgentAddEditDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AgentAddEditDialogComponent>,
     private agentService: AgentService,
-    @Inject(MAT_DIALOG_DATA) agentData: agentDataModel
+    @Inject(MAT_DIALOG_DATA) agentData: agentDataModel,
+    private globalService: GlobalService,
   ) {
     this.agentAddEditForm = new FormGroup({
       businessName: new FormControl(
@@ -351,6 +353,7 @@ export class AgentAddEditDialogComponent implements OnInit {
       const updateAgentData = {
         ...this.agentAddEditForm.value,
       } as Partial<agentDataModel>;
+      updateAgentData.editedBy = this.globalService.username!;
       if (updateAgentData.community != this.communityControl.value) {
         updateAgentData.community = this.communityControl.value;
       }
@@ -368,6 +371,7 @@ export class AgentAddEditDialogComponent implements OnInit {
         // Add new agent
         const newAgent = { ...this.agentAddEditForm.value } as agentDataModel;
         newAgent.status = 'active'; // Set status to active
+        newAgent.createdBy = this.globalService.username!;
         newAgent.community = this.communityControl.value; // Set community
 
         // Call service to add new agent

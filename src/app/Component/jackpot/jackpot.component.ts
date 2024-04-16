@@ -20,6 +20,7 @@ import { jackpotDataModel } from '../../DataModels/jackpotData.model';
 import { JackpotService } from '../../Services/jackpot.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { GlobalService } from '../../Services/global.service';
 
 @Component({
   selector: 'app-jackpot',
@@ -47,7 +48,8 @@ export class JackpotComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private jackpotService: JackpotService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private globalService: GlobalService
   ) {}
 
   @Input() displayedColumns: string[] = [
@@ -79,11 +81,14 @@ export class JackpotComponent implements OnInit {
   deleteJackpot(data: Partial<jackpotDataModel>) {
     const id = data.id;
 
-    const newJackpot = { ...data } as Partial<jackpotDataModel>;
-    newJackpot.status = 'inactive';
-    delete newJackpot.id;
+    const updateJackpotEntry = {
+      ...data,
+      status: 'inactive',
+    } as Partial<jackpotDataModel>;
+    updateJackpotEntry.editedBy = this.globalService.username!;
+    delete updateJackpotEntry.id;
 
-    this.jackpotService.updateJackpot(id!, newJackpot).subscribe((val) => {
+    this.jackpotService.updateJackpot(id!, updateJackpotEntry).subscribe((val) => {
       if (val === undefined) {
         this.refreshTable(true);
         this.openSnackBar(

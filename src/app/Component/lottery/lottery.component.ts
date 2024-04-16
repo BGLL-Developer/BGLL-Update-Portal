@@ -20,6 +20,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LotteryService } from '../../Services/lottery.service';
 import { lotteryDataModel } from '../../DataModels/lotteryData.model';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { GlobalService } from '../../Services/global.service';
 
 @Component({
   selector: 'app-lottery',
@@ -47,7 +48,8 @@ export class LotteryComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private lotteryService: LotteryService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private globalService: GlobalService
   ) {}
 
   @Input() displayedColumns: string[] = ['date', 'number', 'action']; // Input property for displayed columns
@@ -73,11 +75,12 @@ export class LotteryComponent implements OnInit {
     // Deleting a lottery entry
     const id = data.id;
 
-    const newLottery = { ...data } as Partial<lotteryDataModel>;
-    newLottery.status = 'inactive';
-    delete newLottery.id;
+    const updateLotteryEntry = { ...data,
+      status: 'inactive'} as Partial<lotteryDataModel>;
+    updateLotteryEntry.editedBy = this.globalService.username!;
+    delete updateLotteryEntry.id;
 
-    this.lotteryService.updateLottery(id!, newLottery).subscribe((val) => {
+    this.lotteryService.updateLottery(id!, updateLotteryEntry).subscribe((val) => {
       if (val === undefined) {
         // Refreshing table and showing success message
         this.refreshTable(true);

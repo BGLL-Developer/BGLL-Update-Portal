@@ -18,6 +18,7 @@ import { tap } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LotteryService } from '../../Services/lottery.service';
 import { lotteryDataModel } from '../../DataModels/lotteryData.model';
+import { GlobalService } from '../../Services/global.service';
 
 @Component({
   selector: 'app-lottery-add-edit-dialog',
@@ -47,6 +48,7 @@ export class LotteryAddEditDialogComponent {
   constructor(
     private lotteryService: LotteryService,
     @Inject(MAT_DIALOG_DATA) private lotteryData: lotteryDataModel, // Injecting data into dialog
+    private globalService: GlobalService,
     public dialogRef: MatDialogRef<LotteryAddEditDialogComponent> // Reference to the dialog
   ) {
     // Initializing form group with default values and validators
@@ -94,7 +96,7 @@ export class LotteryAddEditDialogComponent {
       updateLotteryData.date = new Date(
         updateLotteryData.date!
       ).toLocaleDateString();
-
+        updateLotteryData.editedBy = this.globalService.username!;
       delete updateLotteryData.id;
 
       // Calling service to update lottery
@@ -110,7 +112,7 @@ export class LotteryAddEditDialogComponent {
         const newLottery = {
           ...this.lotteryAddEditForm.value,
         } as lotteryDataModel;
-
+        newLottery.createdBy = this.globalService.username!;
         newLottery.status = 'active';
         newLottery.date = new Date(newLottery.date).toLocaleDateString();
 

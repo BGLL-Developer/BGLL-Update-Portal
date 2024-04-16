@@ -18,6 +18,7 @@ import { tap } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JackpotService } from '../../Services/jackpot.service';
 import { jackpotDataModel } from '../../DataModels/jackpotData.model';
+import { GlobalService } from '../../Services/global.service';
 
 @Component({
   selector: 'app-jackpot-add-edit-dialog',
@@ -47,6 +48,7 @@ export class JackpotAddEditDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<JackpotAddEditDialogComponent>, // Reference to the dialog
     private jackpotService: JackpotService,
+    private globalService: GlobalService,
     @Inject(MAT_DIALOG_DATA) private jackpotData: jackpotDataModel // Injecting data into dialog
   ) {
     // Initializing form group with default values and validators
@@ -102,7 +104,7 @@ export class JackpotAddEditDialogComponent {
       updateJackpotData.date = new Date(
         updateJackpotData.date!
       ).toLocaleDateString();
-
+      updateJackpotData.editedBy = this.globalService.username!;
       delete updateJackpotData.id;
 
       // Calling service to update jackpot
@@ -121,7 +123,7 @@ export class JackpotAddEditDialogComponent {
 
         newJackpot.status = 'active';
         newJackpot.date = new Date(newJackpot.date).toLocaleDateString();
-
+        newJackpot.createdBy = this.globalService.username!;
         // Calling service to add new jackpot
         this.jackpotService
           .addJackpot(newJackpot)

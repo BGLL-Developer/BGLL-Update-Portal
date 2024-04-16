@@ -20,6 +20,7 @@ import { agentDataModel } from '../../DataModels/agentData.model';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { GlobalService } from '../../Services/global.service';
 
 @Component({
   selector: 'app-agent',
@@ -57,8 +58,9 @@ export class AgentComponent implements OnInit {
   constructor(
     private dialog: MatDialog, // MatDialog for opening dialogs
     private agentSerive: AgentService, // AgentService for CRUD operations
-    private snackBar: MatSnackBar // MatSnackBar for displaying snack bar messages
-  ) {}
+    private snackBar: MatSnackBar, // MatSnackBar for displaying snack bar messages
+    private globalService: GlobalService,
+    ) {}
 
   ngOnInit(): void {
     this.populateTable(); // Populate the table with agent data
@@ -79,11 +81,12 @@ export class AgentComponent implements OnInit {
   deleteAgent(data: Partial<agentDataModel>) {
     const id = data.id;
 
-    const newAgent = { ...data } as Partial<agentDataModel>;
-    newAgent.status = 'inactive';
-    delete newAgent.id;
+    const UpdateAgent = { ...data,
+      status: 'inactive', } as Partial<agentDataModel>;
+    UpdateAgent.editedBy = this.globalService.username!;
+    delete UpdateAgent.id;
 
-    this.agentSerive.updateAgent(id!, newAgent).subscribe((val) => {
+    this.agentSerive.updateAgent(id!, UpdateAgent).subscribe((val) => {
       if (val === undefined) {
         this.refreshTable(true);
         this.openSnackBar('Agent Removed!', 'success-snackBar');
