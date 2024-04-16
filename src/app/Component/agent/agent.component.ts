@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -20,6 +19,7 @@ import { AgentService } from '../../Services/agent.service';
 import { agentDataModel } from '../../DataModels/agentData.model';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-agent',
@@ -28,7 +28,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './agent.component.css',
   providers: [provideNativeDateAdapter()],
   imports: [
-    HeaderComponent,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -39,6 +38,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatDialogModule,
     MatMenuModule,
     MatSelectModule,
+    RouterOutlet,
+    RouterLink,
   ],
 })
 export class AgentComponent implements OnInit {

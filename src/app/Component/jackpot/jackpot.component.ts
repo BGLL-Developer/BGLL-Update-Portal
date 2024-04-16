@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -20,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { jackpotDataModel } from '../../DataModels/jackpotData.model';
 import { JackpotService } from '../../Services/jackpot.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-jackpot',
@@ -28,7 +28,6 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
   styleUrl: './jackpot.component.css',
   providers: [provideNativeDateAdapter()],
   imports: [
-    HeaderComponent,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -40,6 +39,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
     MatMenuModule,
     MatSelectModule,
     MatSortModule,
+    RouterOutlet,
+    RouterLink,
   ],
 })
 export class JackpotComponent implements OnInit {

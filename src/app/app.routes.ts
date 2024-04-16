@@ -7,15 +7,23 @@ import { LotteryComponent } from './Component/lottery/lottery.component';
 import { AgentComponent } from './Component/agent/agent.component';
 import { ErrorPageComponent } from './Page/error-page/error-page.component';
 import { HomeComponent } from './Component/home/home.component';
+import { DashboardComponent } from './Component/dashboard/dashboard.component';
 
 export const routes: Routes = [
   // Routes the application to diffrent components depending on what the user is doing
   { path: 'login', title: 'Login', component: LoginPageComponent },
-  { path: 'home', title: 'Home', component: HomeComponent },
-  { path: 'boledo', title: 'Boledo', component: BoledoComponent },
-  { path: 'jackpot', title: 'Jackpot', component: JackpotComponent },
-  { path: 'lottery', title: 'Lottery', component: LotteryComponent },
-  { path: 'agent', title: 'Agent', component: AgentComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect to a default child route
+      { path: 'home', title: 'Home', component: HomeComponent },
+      { path: 'boledo', title: 'Boledo', component: BoledoComponent },
+      { path: 'jackpot', title: 'Jackpot', component: JackpotComponent },
+      { path: 'lottery', title: 'Lottery', component: LotteryComponent },
+      { path: 'agent', title: 'Agent', component: AgentComponent },
+    ],
+  },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', title: 'Page Not Found', component: ErrorPageComponent },
 ];

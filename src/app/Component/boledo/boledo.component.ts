@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -19,6 +18,8 @@ import { boledoDataModel } from '../../DataModels/boledoData.model';
 import { BoledoService } from '../../Services/boledo.service';
 import { BoledoAddEditDialogComponent } from '../boledo-add-edit-dialog/boledo-add-edit-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { GlobalService } from '../../Services/global.service';
 
 @Component({
   selector: 'app-boledo',
@@ -27,7 +28,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './boledo.component.css',
   providers: [provideNativeDateAdapter()],
   imports: [
-    HeaderComponent,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -38,6 +38,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatDialogModule,
     MatMenuModule,
     MatSortModule,
+    RouterOutlet,
+    RouterLink,
   ],
 })
 export class BoledoComponent implements OnInit {
@@ -50,7 +52,8 @@ export class BoledoComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private boledoService: BoledoService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private globalService: GlobalService
   ) {}
 
   ngOnInit(): void {
@@ -82,14 +85,15 @@ export class BoledoComponent implements OnInit {
   deleteBoledo(data: Partial<boledoDataModel>) {
     const id = data.id;
 
-    const newBoledoEntry = {
+    const updateBoledoEntry = {
       ...data,
       status: 'inactive',
     } as Partial<boledoDataModel>;
-    delete newBoledoEntry.id;
+    updateBoledoEntry.editedBy = this.globalService.username!;
+    delete updateBoledoEntry.id;
 
     this.boledoService
-      .updateBoledoEntry(id!, newBoledoEntry)
+      .updateBoledoEntry(id!, updateBoledoEntry)
       .subscribe((val) => {
         if (val === undefined) {
           // Refresh table if successful and show success message

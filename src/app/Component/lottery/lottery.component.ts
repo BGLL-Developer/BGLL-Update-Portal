@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -20,6 +19,7 @@ import { LotteryAddEditDialogComponent } from '../lottery-add-edit-dialog/lotter
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LotteryService } from '../../Services/lottery.service';
 import { lotteryDataModel } from '../../DataModels/lotteryData.model';
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-lottery',
@@ -28,7 +28,6 @@ import { lotteryDataModel } from '../../DataModels/lotteryData.model';
   styleUrl: './lottery.component.css',
   providers: [provideNativeDateAdapter()],
   imports: [
-    HeaderComponent,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -40,6 +39,8 @@ import { lotteryDataModel } from '../../DataModels/lotteryData.model';
     MatMenuModule,
     MatSnackBarModule,
     MatSortModule,
+    RouterOutlet,
+    RouterLink,
   ],
 })
 export class LotteryComponent implements OnInit {

@@ -2,18 +2,20 @@ import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../Services/auth.service';
 import { Router } from '@angular/router';
+import { GlobalService } from '../../Services/global.service';
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, RouterOutlet, RouterLink],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
   authService = inject(AuthService);
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private globalService: GlobalService) {}
 
   ngOnInit() {
     this.authService.user$.subscribe((user) => {
@@ -31,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    this.globalService.username = null;
     console.log('User Logged Out');
   }
 }

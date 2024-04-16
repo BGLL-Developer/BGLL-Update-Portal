@@ -18,6 +18,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { tap } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GlobalService } from '../../Services/global.service';
 
 @Component({
   selector: 'app-boledo-add-edit-dialog',
@@ -47,7 +48,8 @@ export class BoledoAddEditDialogComponent {
   constructor(
     private boledoService: BoledoService,
     @Inject(MAT_DIALOG_DATA) private boledoData: boledoDataModel, // Data passed to the dialog
-    public dialogRef: MatDialogRef<BoledoAddEditDialogComponent> // Reference to the dialog
+    public dialogRef: MatDialogRef<BoledoAddEditDialogComponent>, // Reference to the dialog
+    private globalService: GlobalService
   ) {
     // Initialize form group
     this.boledoAddEditForm = new FormGroup({
@@ -90,6 +92,7 @@ export class BoledoAddEditDialogComponent {
       updateBoledoData.date = new Date(
         updateBoledoData.date!
       ).toLocaleDateString(); // Convert date to string
+      updateBoledoData.editedBy = this.globalService.username!;
       delete updateBoledoData.id; // Remove ID field
 
       // Call service to update Boledo entry
@@ -106,6 +109,7 @@ export class BoledoAddEditDialogComponent {
         } as boledoDataModel;
         newBoledo.status = 'active'; // Set status to active
         newBoledo.date = new Date(newBoledo.date).toLocaleDateString(); // Convert date to string
+        newBoledo.createdBy = this.globalService.username!;
 
         // Call service to add new Boledo entry
         this.boledoService
