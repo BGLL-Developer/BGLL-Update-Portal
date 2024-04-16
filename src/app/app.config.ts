@@ -4,9 +4,11 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBTMrLBvBniX58bDBQgWuUtuU-SAu1qIxs',
@@ -22,8 +24,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     importProvidersFrom([
+      provideFirebaseApp(() => initializeApp(firebaseConfig)),
+      provideAuth(() => getAuth()),
       AngularFireModule.initializeApp(firebaseConfig),
-      AngularFireAuthModule,
       AngularFirestoreModule,
       AngularFirestore,
     ]),

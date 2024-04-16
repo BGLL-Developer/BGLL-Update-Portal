@@ -7,12 +7,22 @@
       style="width: 200px; height: auto"
     />
     <h2 class="text-center">Website Update Portal <br />Login</h2>
+    @if(errorMessage){
+    <div class="p-2 text-center alert alert-danger">{{ errorMessage }}</div>
+    }
     <!-- login form -->
-    <form>
+    <form [formGroup]="loginForm">
       <div class="mb-1">
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput type="email" id="email" name="email" required />
+          <input
+            matInput
+            type="email"
+            id="email"
+            name="email"
+            formControlName="email"
+            required
+          />
         </mat-form-field>
       </div>
       <div class="mb-3">
@@ -23,12 +33,13 @@
             type="password"
             id="password"
             name="password"
+            formControlName="password"
             required
           />
         </mat-form-field>
       </div>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button mat-raised-button color="primary" (click)="verifyUser()">
+        <button mat-raised-button color="primary" (click)="onLoginClicked()">
           Login
         </button>
       </div>
