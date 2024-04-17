@@ -32,8 +32,16 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
-    this.globalService.username = null;
-    console.log('User Logged Out');
+    this.authService.logout().subscribe(
+      () => {
+        // handle successful logout
+        this.globalService.username = null;
+        console.log('User Logged Out (Server Confirmed)');
+      },
+      (error) => {
+        // handle logout error
+        console.error('Error logging out:', error);
+      }
+    );
   }
 }

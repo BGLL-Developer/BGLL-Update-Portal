@@ -32,6 +32,17 @@ export class LoginComponent {
   authService = inject(AuthService);
 
   constructor(private router: Router, private globalService: GlobalService) {
+    this.authService.logout().subscribe(
+      () => {
+        // handle successful logout
+        this.globalService.username = null;
+      },
+      (error) => {
+        // handle logout error
+        console.error('Error:', error);
+      }
+    );
+
     this.loginForm = new FormGroup({
       email: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
