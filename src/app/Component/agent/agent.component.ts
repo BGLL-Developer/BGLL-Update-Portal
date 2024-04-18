@@ -8,6 +8,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+
 import {
   MatDialog,
   MatDialogConfig,
@@ -41,6 +43,7 @@ import { GlobalService } from '../../Services/global.service';
     MatSelectModule,
     RouterOutlet,
     RouterLink,
+    MatPaginatorModule
   ],
 })
 export class AgentComponent implements OnInit {
@@ -53,6 +56,7 @@ export class AgentComponent implements OnInit {
   ]; // Columns to be displayed in the table
   dataSource = new MatTableDataSource<agentDataModel>(); // DataSource for MatTable
   @ViewChild('matSortAgent') sortAgent!: MatSort; // Reference to MatSort
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   changeDet: any; // Change detector reference
 
   constructor(
@@ -67,6 +71,7 @@ export class AgentComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sortAgent; // Assign MatSort to the DataSource after view initialization
   }
 
@@ -151,7 +156,6 @@ export class AgentComponent implements OnInit {
   filterByDistrict(event: any) {
     const selectedDistrict = event.value;
     this.agentSerive.getAgentByDistrict(selectedDistrict).subscribe((data) => {
-      console.log(data);
       this.dataSource.data = data;
     });
   }

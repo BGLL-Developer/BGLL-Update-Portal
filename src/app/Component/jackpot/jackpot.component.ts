@@ -8,6 +8,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+
 import {
   MatDialog,
   MatDialogConfig,
@@ -42,6 +44,7 @@ import { GlobalService } from '../../Services/global.service';
     MatSortModule,
     RouterOutlet,
     RouterLink,
+    MatPaginatorModule
   ],
 })
 export class JackpotComponent implements OnInit {
@@ -61,12 +64,15 @@ export class JackpotComponent implements OnInit {
   ]; // Columns to be displayed in the table
   dataSource = new MatTableDataSource<jackpotDataModel>(); // DataSource for MatTable
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
 
   ngOnInit(): void {
     this.populateTable(); // Populate the table with jackpot data
   }
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 

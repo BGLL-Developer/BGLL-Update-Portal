@@ -9,6 +9,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {
   MatDialog,
   MatDialogConfig,
@@ -40,6 +41,7 @@ import { GlobalService } from '../../Services/global.service';
     MatSortModule,
     RouterOutlet,
     RouterLink,
+    MatPaginatorModule
   ],
 })
 export class BoledoComponent implements OnInit {
@@ -48,6 +50,7 @@ export class BoledoComponent implements OnInit {
   // Define data source for MatTable
   dataSource = new MatTableDataSource<boledoDataModel>();
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private dialog: MatDialog,
@@ -62,6 +65,7 @@ export class BoledoComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 

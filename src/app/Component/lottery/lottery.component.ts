@@ -9,6 +9,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 
 import {
   MatDialog,
@@ -42,6 +43,7 @@ import { GlobalService } from '../../Services/global.service';
     MatSortModule,
     RouterOutlet,
     RouterLink,
+    MatPaginatorModule
   ],
 })
 export class LotteryComponent implements OnInit {
@@ -55,12 +57,15 @@ export class LotteryComponent implements OnInit {
   @Input() displayedColumns: string[] = ['date', 'number', 'action']; // Input property for displayed columns
   dataSource = new MatTableDataSource<lotteryDataModel>(); // Data source for MatTable
   @ViewChild(MatSort) sort!: MatSort; // ViewChild for sorting
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
 
   ngOnInit(): void {
     this.populateTable(); // Initializing component by populating table data
   }
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort; // Assigning sort to dataSource after view initialization
   }
 
