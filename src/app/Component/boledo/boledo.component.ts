@@ -48,7 +48,7 @@ export class BoledoComponent implements OnInit {
   // Define displayed columns
   displayedColumns: string[] = ['date', 'winningNumber', 'action'];
   // Define data source for MatTable
-  dataSource = new MatTableDataSource<boledoDataModel>();
+  dataSource = new MatTableDataSource<any>();
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -72,7 +72,14 @@ export class BoledoComponent implements OnInit {
   // Function to populate the table with data
   populateTable() {
     this.boledoService.getAllBoledo('active').subscribe((data) => {
-      this.dataSource.data = data;
+      // Loop through the data and convert date strings to Date objects
+      const formattedData = data.map((item) => {
+        return {
+          ...item, 
+          date: new Date(item.date), 
+        };
+      });
+      this.dataSource.data = formattedData;
     });
   }
 

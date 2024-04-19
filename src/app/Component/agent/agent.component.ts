@@ -8,6 +8,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 
 import {
@@ -19,7 +20,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { AgentAddEditDialogComponent } from '../agent-add-edit-dialog/agent-add-edit-dialog.component';
 import { AgentService } from '../../Services/agent.service';
 import { agentDataModel } from '../../DataModels/agentData.model';
-import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { GlobalService } from '../../Services/global.service';
@@ -43,7 +43,8 @@ import { GlobalService } from '../../Services/global.service';
     MatSelectModule,
     RouterOutlet,
     RouterLink,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule
   ],
 })
 export class AgentComponent implements OnInit {
@@ -55,7 +56,7 @@ export class AgentComponent implements OnInit {
     'action',
   ]; // Columns to be displayed in the table
   dataSource = new MatTableDataSource<agentDataModel>(); // DataSource for MatTable
-  @ViewChild('matSortAgent') sortAgent!: MatSort; // Reference to MatSort
+  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   changeDet: any; // Change detector reference
 
@@ -72,7 +73,7 @@ export class AgentComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sortAgent; // Assign MatSort to the DataSource after view initialization
+    this.dataSource.sort = this.sort;
   }
 
   // Populate the table with agent data

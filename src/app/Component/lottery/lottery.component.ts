@@ -55,7 +55,7 @@ export class LotteryComponent implements OnInit {
   ) {}
 
   @Input() displayedColumns: string[] = ['date', 'number', 'action']; // Input property for displayed columns
-  dataSource = new MatTableDataSource<lotteryDataModel>(); // Data source for MatTable
+  dataSource = new MatTableDataSource<any>(); // Data source for MatTable
   @ViewChild(MatSort) sort!: MatSort; // ViewChild for sorting
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -72,7 +72,14 @@ export class LotteryComponent implements OnInit {
   populateTable() {
     // Fetching all active lotteries from service and updating dataSource
     this.lotteryService.getAllLotteries('active').subscribe((data) => {
-      this.dataSource.data = data;
+      // Loop through the data and convert date strings to Date objects
+      const formattedData = data.map((item) => {
+        return {
+          ...item, 
+          date: new Date(item.date), 
+        };
+      });
+      this.dataSource.data = formattedData;
     });
   }
 

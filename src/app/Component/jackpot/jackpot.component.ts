@@ -62,7 +62,7 @@ export class JackpotComponent implements OnInit {
     'number3',
     'action',
   ]; // Columns to be displayed in the table
-  dataSource = new MatTableDataSource<jackpotDataModel>(); // DataSource for MatTable
+  dataSource = new MatTableDataSource<any>(); // DataSource for MatTable
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -79,7 +79,14 @@ export class JackpotComponent implements OnInit {
   // Populate the table with jackpot data
   populateTable() {
     this.jackpotService.getAllJackpots('active').subscribe((data) => {
-      this.dataSource.data = data;
+      // Loop through the data and convert date strings to Date objects
+      const formattedData = data.map((item) => {
+        return {
+          ...item, 
+          date: new Date(item.date), 
+        };
+      });
+      this.dataSource.data = formattedData;
     });
   }
 
