@@ -8,7 +8,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 import {
   MatDialog,
@@ -53,7 +53,7 @@ export class JackpotComponent implements OnInit {
     private jackpotService: JackpotService,
     private snackBar: MatSnackBar,
     private globalService: GlobalService
-  ) {}
+  ) { }
 
   @Input() displayedColumns: string[] = [
     'date',
@@ -82,8 +82,8 @@ export class JackpotComponent implements OnInit {
       // Loop through the data and convert date strings to Date objects
       const formattedData = data.map((item) => {
         return {
-          ...item, 
-          date: new Date(item.date), 
+          ...item,
+          date: new Date(item.date),
         };
       });
       this.dataSource.data = formattedData;
@@ -176,7 +176,13 @@ export class JackpotComponent implements OnInit {
     this.jackpotService
       .getJackpotByDate(dateFilterInput.toString())
       .subscribe((data) => {
-        this.dataSource.data = data;
+        const formattedData = data.map((item) => {
+          return {
+            ...item,
+            date: new Date(item.date),
+          };
+        });
+        this.dataSource.data = formattedData;
       });
   }
 }

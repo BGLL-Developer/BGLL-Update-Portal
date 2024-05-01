@@ -9,7 +9,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import {
   MatDialog,
   MatDialogConfig,
@@ -57,7 +57,7 @@ export class BoledoComponent implements OnInit {
     private boledoService: BoledoService,
     private snackBar: MatSnackBar,
     private globalService: GlobalService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Populate table on component initialization
@@ -75,8 +75,8 @@ export class BoledoComponent implements OnInit {
       // Loop through the data and convert date strings to Date objects
       const formattedData = data.map((item) => {
         return {
-          ...item, 
-          date: new Date(item.date), 
+          ...item,
+          date: new Date(item.date),
         };
       });
       this.dataSource.data = formattedData;
@@ -85,10 +85,17 @@ export class BoledoComponent implements OnInit {
 
   // Function to filter data by date
   dateFilter(dateFilterInput: string) {
+    console.log(dateFilterInput)
     this.boledoService
-      .getBoledoByDate(dateFilterInput.toString())
+      .getBoledoByDate(dateFilterInput)
       .subscribe((data) => {
-        this.dataSource.data = data;
+        const formattedData = data.map((item) => {
+          return {
+            ...item,
+            date: new Date(item.date),
+          };
+        });
+        this.dataSource.data = formattedData;
       });
   }
 
