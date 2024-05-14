@@ -8,6 +8,8 @@ import { agentDataModel } from '../DataModels/agentData.model';
   providedIn: 'root',
 })
 export class AgentService {
+  
+  
   constructor(private db: AngularFirestore) {}
 
   getAllAgents(status: string) {
@@ -45,4 +47,6 @@ export class AgentService {
       .get()
       .pipe(map((snaps) => convertSnaps<agentDataModel>(snaps)));
   }
+
 }
+

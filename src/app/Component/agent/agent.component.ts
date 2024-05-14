@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -23,6 +23,13 @@ import { agentDataModel } from '../../DataModels/agentData.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { GlobalService } from '../../Services/global.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Observable, map, startWith } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+
+
 
 @Component({
   selector: 'app-agent',
@@ -44,10 +51,15 @@ import { GlobalService } from '../../Services/global.service';
     RouterOutlet,
     RouterLink,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AsyncPipe,
   ],
 })
 export class AgentComponent implements OnInit {
+
   displayedColumns: string[] = [
     'businessName',
     'address',
@@ -58,22 +70,37 @@ export class AgentComponent implements OnInit {
   dataSource = new MatTableDataSource<agentDataModel>(); // DataSource for MatTable
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('agentSearch') searchField!:ElementRef;
   changeDet: any; // Change detector reference
+
+  businessNames: string[] = [];
 
   constructor(
     private dialog: MatDialog, // MatDialog for opening dialogs
     private agentSerive: AgentService, // AgentService for CRUD operations
     private snackBar: MatSnackBar, // MatSnackBar for displaying snack bar messages
     private globalService: GlobalService,
-    ) {}
+    private db: AngularFirestore
+  ) {}
+
 
   ngOnInit(): void {
     this.populateTable(); // Populate the table with agent data
+
   }
+
+  applyFilter(filterValue: any) {
+    
+    const value = filterValue.target.value.trim().toLowerCase();
+    this.dataSource.filter = value;
+
+    }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.searchField.nativeElement.focus();
+    this.changeDet.detectChanges();
   }
 
   // Populate the table with agent data
@@ -87,8 +114,10 @@ export class AgentComponent implements OnInit {
   deleteAgent(data: Partial<agentDataModel>) {
     const id = data.id;
 
-    const UpdateAgent = { ...data,
-      status: 'inactive', } as Partial<agentDataModel>;
+    const UpdateAgent = {
+      ...data,
+      status: 'inactive',
+    } as Partial<agentDataModel>;
     UpdateAgent.editedBy = this.globalService.username!;
     delete UpdateAgent.id;
 
@@ -160,4 +189,5 @@ export class AgentComponent implements OnInit {
       this.dataSource.data = data;
     });
   }
+
 }
