@@ -136,7 +136,6 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Yalbac',
     'Corozal Town',
     'Altamira',
-    'Buena Vista',
     'Calcutta',
     'Caledonia',
     'Carolina',
@@ -145,7 +144,6 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Concepción',
     'Consejo',
     'Copper Bank',
-    'Cristo Rey',
     'Estrella',
     'Libertad',
     'Little Belize',
@@ -155,7 +153,6 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Progresso',
     'Ranchito',
     'San Andrés',
-    'San Antonio',
     'San Joaquín',
     'San Narciso',
     'San Pedro',
@@ -179,7 +176,6 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Indian Hill Estate',
     'Petville',
     'Richmond Hill',
-    'San Antonio',
     'San Carlos',
     'San Estevan',
     'San Felipe',
@@ -192,7 +188,6 @@ export class AgentAddEditDialogComponent implements OnInit {
     'San Pablo',
     'San Román',
     'Santa Cruz',
-    'Santa Marta',
     'Shipyard',
     'Sylvestre Camp',
     'Tower Hill',
@@ -219,8 +214,6 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Pomona',
     'Red Bank',
     'Riversdale',
-    'San Juan',
-    'Santa Rosa',
     'Sarawee',
     'Seine Bight',
     'Silk Grass',
@@ -251,7 +244,6 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Graham Creek',
     'Hicattee',
     'Hicattee Southern Highway',
-    'Indian Creek',
     'Jacinto/Westmoreland',
     'Jalacte',
     'Jordan',
@@ -269,18 +261,12 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Pinehill',
     'Pueblo Viejo',
     'Punta Negra',
-    'San Antonio',
     'San Benito Poite',
-    'San Felipe',
-    'San Jose',
     'San Isidro',
     'San Lucas',
-    'San Marcos',
     'San Miguel',
-    'San Pablo',
     'San Vicente',
     'Santa Ana',
-    'Santa Elena',
     'Santa Teresa',
     'Silver Creek',
     'Sunday Wood',
@@ -290,6 +276,7 @@ export class AgentAddEditDialogComponent implements OnInit {
     'Wilson Road',
     'Yemeri Grove',
   ];
+
   filteredOptions!: Observable<string[]>; // Observable for filtered community options
   updateAgentID = ''; // ID of the agent being updated
 
@@ -297,7 +284,7 @@ export class AgentAddEditDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AgentAddEditDialogComponent>,
     private agentService: AgentService,
     @Inject(MAT_DIALOG_DATA) agentData: agentDataModel,
-    private globalService: GlobalService,
+    private globalService: GlobalService
   ) {
     this.agentAddEditForm = new FormGroup({
       businessName: new FormControl(
