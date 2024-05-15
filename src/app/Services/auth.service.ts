@@ -5,15 +5,17 @@ import {
   signOut,
   updateProfile,
   user,
+  sendPasswordResetEmail
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import { UserInterface } from '../DataModels/userLoginData.model';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor() {}
+  constructor(private afAuth: AngularFireAuth) {}
   firebaseAuth = inject(Auth);
 
   user$ = user(this.firebaseAuth);
@@ -32,4 +34,10 @@ export class AuthService {
     const promise = signOut(this.firebaseAuth);
     return from(promise);
   }
+
+  resetPassword(email: string) {
+    sendPasswordResetEmail(this.firebaseAuth, email);
+  }
+
+  
 }

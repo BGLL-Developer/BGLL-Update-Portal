@@ -27,6 +27,7 @@ import { GlobalService } from '../../Services/global.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+
   loginForm;
   errorMessage: string | null = null;
   authService = inject(AuthService);
@@ -68,4 +69,10 @@ export class LoginComponent {
       this.errorMessage = 'Invalid Email and Passowrd';
     }
   }
+
+  onForgotClicked() {
+      this.router.navigateByUrl('/resetPassword');
+    }
+
+  
 }

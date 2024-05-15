@@ -25,7 +25,7 @@
           />
         </mat-form-field>
       </div>
-      <div class="mb-3">
+      <div class="mb-1">
         <mat-form-field appearance="fill">
           <mat-label>Password</mat-label>
           <input
@@ -38,10 +38,15 @@
           />
         </mat-form-field>
       </div>
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    
+      <div class="d-grid  d-md-flex justify-content-md-end">
         <button mat-raised-button color="primary" (click)="onLoginClicked()">
           Login
         </button>
+      </div>
+
+      <div class="row pt-3 text-center">
+        <a id="ForgotLink" (click)="onForgotClicked()">Forgot Password?</a>
       </div>
     </form>
   </div>

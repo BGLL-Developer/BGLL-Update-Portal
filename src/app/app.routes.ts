@@ -8,10 +8,13 @@ import { AgentComponent } from './Component/agent/agent.component';
 import { ErrorPageComponent } from './Page/error-page/error-page.component';
 import { HomeComponent } from './Component/home/home.component';
 import { DashboardComponent } from './Component/dashboard/dashboard.component';
+import { ResetPasswordPageComponent } from './Page/reset-password-page/reset-password-page.component';
+
 
 export const routes: Routes = [
   // Routes the application to diffrent components depending on what the user is doing
   { path: 'login', title: 'Login', component: LoginPageComponent },
+  { path: 'resetPassword', title: 'ResetPassword', component: ResetPasswordPageComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
