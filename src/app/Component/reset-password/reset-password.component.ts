@@ -3,6 +3,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../Services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 import {
   FormControl,
   FormGroup,
@@ -21,7 +22,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
     MatInputModule,
     MatButtonModule,
     FormsModule,
-    ReactiveFormsModule,],
+    ReactiveFormsModule, MatIconModule],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css'
 })
@@ -43,19 +44,19 @@ export class ResetPasswordComponent {
 
   onConfirmClicked() {
 
-    if(this.resetForm.valid) {
-    const email = this.resetForm.value.email ?? '';
-    this.authService.resetPassword(email);
-    this.successMessage = "Email Sent Successfully.";
-    this.resetForm.reset();
-    
+    if (this.resetForm.valid) {
+      const email = this.resetForm.value.email ?? '';
+      this.authService.resetPassword(email);
+      this.successMessage = "Email Sent Successfully.";
+      this.resetForm.reset();
+
     }
 
   }
-  
+
 
 
   BackToLogin() {
     this.router.navigateByUrl('/login');
-    }
+  }
 }

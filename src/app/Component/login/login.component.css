@@ -1,15 +1,26 @@
 #ForgotLink {
-    cursor: pointer; /* Set the default cursor style */
-    text-decoration: none; /* Underline the text by default */
+  cursor: pointer;
+  /* Set the default cursor style */
+  text-decoration: none;
+  /* Underline the text by default */
 
-  }
-  
-  #ForgotLink:hover {
-    color: #673ab7;
-  }
+}
 
-  #ForgotLink:active{
-    color: #542e94;
-    font-weight: 550;
+#ForgotLink:hover {
+  color: #673ab7;
+}
 
-  }
+#ForgotLink:active {
+  color: #542e94;
+  font-weight: 550;
+
+}
+
+.icon-text-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon-text-container mat-icon {
+  font-size: 22px;
+}

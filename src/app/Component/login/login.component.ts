@@ -3,6 +3,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../Services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 import {
   FormControl,
   FormGroup,
@@ -22,6 +23,7 @@ import { GlobalService } from '../../Services/global.service';
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatIconModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -71,8 +73,8 @@ export class LoginComponent {
   }
 
   onForgotClicked() {
-      this.router.navigateByUrl('/resetPassword');
-    }
+    this.router.navigateByUrl('/resetPassword');
+  }
 
-  
+
 }
