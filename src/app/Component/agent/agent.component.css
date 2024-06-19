@@ -9,3 +9,11 @@
   justify-content: right;
   float: right;
 }
+
+.inActive {
+  color: red;
+
+  mat-icon {
+    color: red;
+  }
+}

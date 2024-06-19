@@ -9,7 +9,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 import {
   MatDialog,
@@ -70,10 +70,11 @@ export class AgentComponent implements OnInit {
   dataSource = new MatTableDataSource<agentDataModel>(); // DataSource for MatTable
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild('agentSearch') searchField!:ElementRef;
+  @ViewChild('agentSearch') searchField!: ElementRef;
   changeDet: any; // Change detector reference
 
   businessNames: string[] = [];
+  agentListStatus: string = 'active';
 
   constructor(
     private dialog: MatDialog, // MatDialog for opening dialogs
@@ -81,20 +82,20 @@ export class AgentComponent implements OnInit {
     private snackBar: MatSnackBar, // MatSnackBar for displaying snack bar messages
     private globalService: GlobalService,
     private db: AngularFirestore
-  ) {}
+  ) { }
 
 
   ngOnInit(): void {
-    this.populateTable(); // Populate the table with agent data
+    this.populateTable(this.agentListStatus); // Populate the table with agent data
 
   }
 
   applyFilter(filterValue: any) {
-    
+
     const value = filterValue.target.value.trim().toLowerCase();
     this.dataSource.filter = value;
 
-    }
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -104,8 +105,8 @@ export class AgentComponent implements OnInit {
   }
 
   // Populate the table with agent data
-  populateTable() {
-    this.agentSerive.getAllAgents('active').subscribe((data) => {
+  populateTable(status: string) {
+    this.agentSerive.getAllAgents(status).subscribe((data) => {
       this.dataSource.data = data;
     });
   }
@@ -127,6 +128,26 @@ export class AgentComponent implements OnInit {
         this.openSnackBar('Agent Removed!', 'success-snackBar');
       } else {
         this.openSnackBar('Agent was not Removed!', 'error-snakcBar');
+      }
+    });
+  }
+
+  activateAgent(data: Partial<agentDataModel>) {
+    const id = data.id;
+
+    const UpdateAgent = {
+      ...data,
+      status: 'active',
+    } as Partial<agentDataModel>;
+    UpdateAgent.editedBy = this.globalService.username!;
+    delete UpdateAgent.id;
+
+    this.agentSerive.updateAgent(id!, UpdateAgent).subscribe((val) => {
+      if (val === undefined) {
+        this.refreshTable(true);
+        this.openSnackBar('Agent Re-Activated!', 'success-snackBar');
+      } else {
+        this.openSnackBar('Agent was not Re-Activated!', 'error-snakcBar');
       }
     });
   }
@@ -178,16 +199,28 @@ export class AgentComponent implements OnInit {
   // Refresh the table
   refreshTable(event: boolean) {
     if (event) {
-      this.populateTable();
+      this.populateTable(this.agentListStatus);
     }
   }
 
   // Filter agents by district
   filterByDistrict(event: any) {
     const selectedDistrict = event.value;
-    this.agentSerive.getAgentByDistrict(selectedDistrict).subscribe((data) => {
+    this.agentSerive.getAgentByDistrict(selectedDistrict, this.agentListStatus).subscribe((data) => {
       this.dataSource.data = data;
     });
+  }
+
+  showInactiveAgents() {
+    if (this.agentListStatus == 'active') {
+      this.agentListStatus = 'inactive'
+      this.populateTable(this.agentListStatus);
+    }
+    else {
+      this.agentListStatus = 'active'
+      this.populateTable(this.agentListStatus);
+    }
+
   }
 
 }

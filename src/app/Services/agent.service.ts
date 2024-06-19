@@ -8,9 +8,9 @@ import { agentDataModel } from '../DataModels/agentData.model';
   providedIn: 'root',
 })
 export class AgentService {
-  
-  
-  constructor(private db: AngularFirestore) {}
+
+
+  constructor(private db: AngularFirestore) { }
 
   getAllAgents(status: string) {
     return this.db
@@ -39,10 +39,10 @@ export class AgentService {
     return from(this.db.doc('/Agents/' + agentID).update(changes));
   }
 
-  getAgentByDistrict(district: string) {
+  getAgentByDistrict(district: string, status: string) {
     return this.db
       .collection('/Agents', (ref) =>
-        ref.where('status', '==', 'active').where('district', '==', district)
+        ref.where('status', '==', status).where('district', '==', district)
       )
       .get()
       .pipe(map((snaps) => convertSnaps<agentDataModel>(snaps)));
